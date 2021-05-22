@@ -29,11 +29,11 @@ export class TextGameEngine
 	 * Ask user for a number
 	 * @param min Min number, null - no limit
 	 * @param max Max number, null - no limit
-	 * @param useSelect Use select if there are less then 16 int options
+	 * @param useChoose Use choose if there are less then 16 int options
 	 */
-	public async num(min: number | null = null, max: number | null = null, useSelect = true)
+	public async num(min: number | null = null, max: number | null = null, useChoose = true)
 	{
-		if (useSelect && typeof max == "number" && typeof min == "number" && max - min < 16)
+		if (useChoose && typeof max == "number" && typeof min == "number" && max - min < 16)
 		{
 			min = Math.ceil(min);
 			max = Math.floor(max);
