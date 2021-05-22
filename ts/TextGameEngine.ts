@@ -21,7 +21,9 @@ export class TextGameEngine
 	 */
 	public print(text: string = "", newParagraph = false)
 	{
-
+		const line = new LineText(text, newParagraph);
+		this.lines.push(line)
+		this.linesHolder.appendChild(line.mainEl);
 	}
 	/**
 	 * Ask user for a number
@@ -31,7 +33,24 @@ export class TextGameEngine
 	 */
 	public async num(min: number | null = null, max: number | null = null, useSelect = true)
 	{
-
+		if (useSelect && typeof max == "number" && typeof min == "number" && max - min < 16)
+		{
+			min = Math.ceil(min);
+			max = Math.floor(max);
+			const options = [];
+			for (let i = min; i <= max; i++) options.push(i);
+			const line = new LineChoose(options);
+			this.addLine(line);
+			const result = await line.ask();
+			return options[result];
+		}
+		else
+		{
+			const line = new LineGetNum(min, max);
+			this.addLine(line);
+			const result = await line.ask();
+			return result;
+		}
 	}
 	/**
 	 * Ask user for a text
@@ -40,7 +59,10 @@ export class TextGameEngine
 	 */
 	public async text(max = -1, min = 0, trimSpaces = true, allowSpaces = true)
 	{
-
+		const line = new LineGetText(min, max, trimSpaces, allowSpaces);
+		this.addLine(line);
+		const result = await line.ask();
+		return result;
 	}
 	/**
 	 * Ask the user to choose one of the options
@@ -48,26 +70,67 @@ export class TextGameEngine
 	 */
 	public async choose(options: string[], everyAtNewLine = false)
 	{
-
+		const line = new LineChoose(options);
+		this.addLine(line);
+		const result = await line.ask();
+		return result;
 	}
 	/**
 	 * @param seconds Seconds to wait, -1 - until user tap continue button
 	 */
 	public async wait(seconds = -1)
 	{
-
+		if (seconds < 0)
+		{
+			this.waitDiv.classList.add("wait-inf");
+			let promiseResolve: () => void;
+			const onClick = () =>
+			{
+				this.waitDiv.classList.remove("wait-inf");
+				this.waitDiv.removeEventListener("click", onClick);
+				promiseResolve();
+			}
+			return new Promise<void>((resolve, reject) =>
+			{
+				promiseResolve = resolve;
+				this.waitDiv.addEventListener("click", onClick);
+			});
+		}
+		else if (seconds > 0)
+		{
+			this.waitDiv.classList.add("wait-time");
+			let promiseResolve: () => void;
+			const onTime = () =>
+			{
+				this.waitDiv.classList.remove("wait-time");
+				promiseResolve();
+			}
+			return new Promise<void>((resolve, reject) =>
+			{
+				promiseResolve = resolve;
+				setTimeout(onTime, seconds * 1000);
+			});
+		}
 	}
 	/**
 	 * @param lineCount Line count to remove, -1 to remove all lines
 	 */
 	public clear(lineCount = -1)
 	{
+		const count = lineCount >= 0 ? lineCount : this.lines.length;
+		for (let i = 0; i < count; i++) {
+			const line = this.lines.pop();
+			if (line == undefined) break;
 
+			line.rejectPromise();
+			this.linesHolder.removeChild(line.mainEl);
+		}
 	}
 
-	private async addLine(line: Line)
+	private addLine(line: Line)
 	{
-
+		this.linesHolder.appendChild(line.mainEl);
+		this.lines.push(line);
 	}
 }
 
