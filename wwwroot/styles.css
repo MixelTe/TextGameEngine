@@ -1,0 +1,190 @@
+.theme-light {
+	--color-back--: antiquewhite;
+	--color-main--: rgb(181, 243, 146);
+	--color-text--: black;
+}
+.theme-dark {
+	--color-back--: #0d1418;
+	--color-main--: rgb(15, 158, 56);
+	--color-text--: rgb(255, 255, 255);
+}
+
+
+.TextGameEngine-window {
+	--transition--: 0.4s;
+	transition-property: background-color, color;
+	transition: var(--transition--);
+	width: 100%;
+	height: 100%;
+	background-color: var(--color-back--);
+	display: flex;
+	justify-content: center;
+}
+.TextGameEngine-main {
+	position: relative;
+	transition-property: background-color, color;
+	transition: var(--transition--);
+	width: 100%;
+	max-width: 700px;
+	height: 100%;
+	background-color: var(--color-back--);
+	/* display: flex; */
+	--header-height--: 50px;
+}
+
+
+.TextGameEngine-header {
+	transition-property: background-color, color;
+	transition: var(--transition--);
+	width: 100%;
+	height: var(--header-height--);
+	background-color: var(--color-main--);
+	color: var(--color-text--);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+.TextGameEngine-version {
+	position: absolute;
+	left: 10px;
+	/* top: 10px; */
+}
+.TextGameEngine-title {
+	font-size: 30px;
+}
+.TextGameEngine-theme {
+	position: absolute;
+	right: 20px;
+	/* top: 10px; */
+}
+
+
+
+.TextGameEngine-console {
+
+}
+.TextGameEngine-lines {
+
+}
+
+.TextGameEngine-wait {
+	transition-property: background-color, color;
+	transition: var(--transition--);
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	bottom: 0px;
+	width: 100%;
+	height: 30px;
+	background-color: transparent;
+	color: transparent;
+	visibility: hidden;
+}
+.TextGameEngine-wait-inf {
+	background-color: var(--color-main--);
+	color: var(--color-text--);
+	visibility: visible;
+}
+.TextGameEngine-wait-time {
+	background-color: var(--color-main--);
+	visibility: visible;
+}
+.TextGameEngine-wait-text {
+	display: none;
+}
+.TextGameEngine-wait-inf .TextGameEngine-wait-text {
+	display: block;
+}
+.TextGameEngine-wait-time .TextGameEngine-wait-bubble {
+	visibility: visible;
+	background-color: var(--color-text--);
+}
+.TextGameEngine-wait-bubble {
+	transition-property: background-color, color;
+	transition: var(--transition--);
+	animation: TextGameEngine-bubbles 2s infinite;
+	visibility: hidden;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background-color: transparent;
+	margin-left: 10px;
+}
+.TextGameEngine-wait-bubble:nth-child(2) { animation-delay: 0s; }
+.TextGameEngine-wait-bubble:nth-child(3) { animation-delay: 0.5s; }
+.TextGameEngine-wait-bubble:nth-child(4) { animation-delay: 1s; }
+
+@keyframes TextGameEngine-bubbles {
+	0% {
+		transform: scale(1);
+	}
+	25% {
+		transform: scale(1.5);
+	}
+	50% {
+		transform: scale(1);
+	}
+}
+
+
+
+
+
+
+.TextGameEngine-switch {
+	position: relative;
+	display: inline-block;
+	width: 53px;
+	height: 15px;
+}
+.TextGameEngine-switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+.TextGameEngine-slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	-webkit-transition: var(--transition--);
+	transition: var(--transition--);
+	border-radius: 34px;
+}
+.TextGameEngine-slider:before {
+	position: absolute;
+	content: "";
+	height: 30px;
+	width: 30px;
+	left: 0px;
+	bottom: 4px;
+	top: 0;
+	bottom: 0;
+	margin: auto 0;
+	-webkit-transition: var(--transition--);
+	transition: var(--transition--);
+	box-shadow: 0 0px 15px #2020203d;
+	background: black url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAsQAAALEBxi1JjQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAOfSURBVEiJlZVLaFxVGMd/333NJG2a+ujUJnGSSWljGvPoQ0tBbIooulDoQgSpEou4UOqiLlzpxoVFEIsgaotaaEhBEXVV8EUXgrao0SYxk6ROjCUxfaQvm8fMPfd+LqZJ5k4ySfxW93yP/+Ocw7mwTOhw21odbG8rzuf6N3fl+iqNDm5rXGreKlXwB1oe8vtr0yanF4JY1YeR2lDzbgnHn5JwxvYJjuhwR7wUjixUXBc3Wfsk/lg7sUYkvmXC1vB+qe3K5IZa90s2cxTNWQASa4B4C0AAfO8kOx8pxnMi4OdaEmbmcg9mIoF7NxLfAiIvSLIrAyChjswpsysg3jy7tEEuLeZgbotUsQL/SjdmIoF4SPl2QM7YNce/mO1xG85+p27dy3lp1XMbIPCrfbGsY0kCM7DxWzWXqgCINQIugh4TQSMuYRRAxSnM/Ss7jvglCfy+1gfwx/bMuhWv/lbR/rp4wLZw88qzPYIcBDIscpazkZdhXf2YMLy1DwnIq1Muxv5eMLCp5zPta6qQTb03oRdVDkO7XYpAdLhtrZkcuoKavIp4MxK7ByDrJDtLXr+VhmWy/oE5cECkfPYzpiNP37ZSIE23pLSvyVtAIGR3RTLizn0ay25ZEXjm3vVGL/wWxCrfU22PXH1LMVXR7lzhYu+y4H+1bjWTf45jV6/Bq38+OF/zTYTAEnUjAzozb0bp0H+eW7cUgdT93o274QxeDQChhK9GCELcy5GJILKsDHxzaFkX4qUJp99F5agrzrWIgFy68SPxM/vnMw6y5glg/uYJctBOHn9nOaLCyJ1/ZqeE4WrLldgHUTkGzY1EU+jb/si+t4oPsFSYkX3PWqqnLJGdAmD+SNzU4PqquQ6rDKl4LOIi70T7FN6wA/crSR2bKaypPmmbUfdBCezXEN0DqC1hgwAEg42Hwmwmcjji1UPZ9lIipxB+Ah1FLR90A3AfcGdBz5dOsnOv5Nmxgv7ENQ2uV0RgynYgXmolu1Ic03YQbJPUiXT+xyGEtnPXw1heGG37Bc2e+9/oAq9I6kQaCp5r2Xz2tHqpA4hb8DwrzHSjUz9COL0icEXftJOd7xeQRcMMNT1ObuxzDafcaMVGvFrw6sC6HWTB6DTwkpPs/KTIzSIqhrauM8GNTzHjuwsfwvkpB6w1IHEQVGV1r+vc8aJsPPXDgtaSXgEd2FXtc/V1gslHLabWa5jzEAXsACm/IVbZz8iqw05Dz8lSGP8BjRZeDZkbZsEAAAAASUVORK5CYII=');
+	background-repeat: no-repeat;
+	background-position: center;
+	border-radius: 50%;
+}
+.TextGameEngine-switch input:checked + .TextGameEngine-slider {
+	background-color: #2196F3;
+}
+.TextGameEngine-switch input:focus + .TextGameEngine-slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+.TextGameEngine-switch input:checked + .TextGameEngine-slider:before {
+	-webkit-transform: translateX(24px);
+	-ms-transform: translateX(24px);
+	transform: translateX(24px);
+	background: white url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANGSURBVEiJndVPbNRVEAfwz9vd/q8tBQtoxSYYDKYmejMGD3DxYloMiRoT22IEDQcPno3xoFclMf6JHrDFyIVEI3g2eiDoRWOMfygqNrSkoeAWCtIu230e3m+77e6KCZO8vH3zZuY7M+/7mxVjVFu7C+vPt7mmh4fi+eEDMUYFVZkdeZU7dhgIzxOj25ULe3fJx6PYamZkDYD4rRDmmgafDIdE3aIJbcrKxkQF4/GtBtuY/43KGVBxOsT/S3YijAomEVBCBe0geNlYfLfBZ3bfJmFlp7u/ONUcYCIMCw6jL1vhFikUURS9Zn88Vn9ZaOJA8DTuA3n0Zjm3ZlDL2VrASpZE8CwaABormAgPC75Cny7cmYE0kwou4Rq4IWeP0fhdc4DjIe+GD0QvIKcbmzOrtl56t9O2gRBYvsKVcyz9ne7nsQgiPhUdtD8uNVYwGRbQK497qu3ZzsYHUuB1EimepTiVKplBGZQM6rI7liFX5/Ur0rPmpYw3ZcEL7fRso3eQQgcCfffT0Z+i9K3GOFMNvh7gWOjDYGpJpuvbkQK1dND/IF1b6Oynf4jW7jU2a3zY6uPQ3whw0/u4S5DYIqsAOjdrkKqutSfbVcncL+ejOoAQsC39VGN9yOiTa8LmXIGOx8h11RxqzzTgeHLOAGKUM4pFFdzMzJYX0n79YiPAP/O0PUSlHTE9cCXdCJ7zVFxZA4DReA4/gKVMd/WvtJcWKf6e6FlapPgHS0UW3uPyN9b58IuxOFU91Ne+E+kL7cb1Oa5O0zPI0kJaa+XaLIszif21q4x2if+1ClLP/iRrUfYNufQTF79P2ceY2lFaZP5HLqaCFaUxmOSsT3RWD42j4mh4RnQEnTZYP+pCLh1Se2uZF0FZdNC0o16Plf8GgMnwOZ5Eot9GiefVmbQiDbtitif52njcUx+q+TSNTgoZQAlzddblJj7ByWah0htc2LvL7L5Nq9r98YhBLSo2481Vfbkh+DtytljWaiy+3QwgxOnhIfl4AmdoGTXw2eUGq8lwWNCDD1WUBC+hYNyLTf9iZ554RAiPG/jyjYKcR7E1wa3sxKkGh/H4Sp3mULNsVyVvTgxTqYIYmRk5oOK0e0/8fEvH25B/AZyRWA6LDlu9AAAAAElFTkSuQmCC');
+	background-repeat: no-repeat;
+	background-position: center;
+}

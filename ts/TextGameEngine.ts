@@ -1,8 +1,9 @@
 /** Engine for text games*/
 export class TextGameEngine
 {
-	private linesHolder: HTMLDivElement = document.createElement("div");
-	private waitDiv: HTMLDivElement = document.createElement("div");
+	private linesHolder: HTMLDivElement = Div("TextGameEngine-lines");
+	private waitDiv: HTMLDivElement = Div("TextGameEngine-wait");
+	private mainDiv: HTMLDivElement = Div("TextGameEngine-window");
 	private lines: Line[] = [];
 
 	/**
@@ -12,9 +13,55 @@ export class TextGameEngine
 	public init(titles = new Titles()): HTMLDivElement
 	{
 		log("TextGameEngine: init");
-		const mainDiv = document.createElement("div");
+		const themeDiv = Div("TextGameEngine-theme");
+		this.mainDiv = Div("TextGameEngine-window", [
+			Div("TextGameEngine-main", [
+				Div("TextGameEngine-header", [
+					Div("TextGameEngine-version", [], titles.version),
+					Div("TextGameEngine-title", [], titles.title),
+					themeDiv,
+				]),
+				Div("TextGameEngine-console", [this.linesHolder]),
+				this.waitDiv,
+			]),
+		]);
+		themeDiv.appendChild(this.createThemeSwitch());
+		this.waitDiv.appendChild(Div("TextGameEngine-wait-text", [], titles.tapToCon));
+		for (let i = 0; i < 3; i++) this.waitDiv.appendChild(Div("TextGameEngine-wait-bubble"));
 
-		return mainDiv;
+		return this.mainDiv;
+	}
+	private createThemeSwitch()
+	{
+		const label = document.createElement("label");
+		label.classList.add("TextGameEngine-switch");
+		const input = document.createElement("input");
+		input.type = "checkbox"
+		const span = document.createElement("span");
+		span.classList.add("TextGameEngine-slider");
+		label.appendChild(input);
+		label.appendChild(span);
+		let nightTheme = localStorage.getItem("nightTheme") != "true";
+		const setTheme = () =>
+		{
+			input.checked = nightTheme;
+			nightTheme = !nightTheme;
+			if (nightTheme)
+			{
+				localStorage.setItem("nightTheme", "true");
+				this.mainDiv.classList.remove("theme-light");
+				this.mainDiv.classList.add("theme-dark");
+			}
+			else
+			{
+				localStorage.setItem("nightTheme", "false");
+				this.mainDiv.classList.add("theme-light");
+				this.mainDiv.classList.remove("theme-dark");
+			}
+		}
+		input.addEventListener("change", setTheme);
+		setTheme();
+		return label;
 	}
 	/**
 	 * Print text to console
@@ -89,11 +136,11 @@ export class TextGameEngine
 		if (seconds < 0)
 		{
 			log("TextGameEngine: wait-inf");
-			this.waitDiv.classList.add("wait-inf");
+			this.waitDiv.classList.add("TextGameEngine-wait-inf");
 			let promiseResolve: () => void;
 			const onClick = () =>
 			{
-				this.waitDiv.classList.remove("wait-inf");
+				this.waitDiv.classList.remove("TextGameEngine-wait-inf");
 				this.waitDiv.removeEventListener("click", onClick);
 				log("TextGameEngine: wait-inf-%cresolve%c", "color:lime", "");
 				promiseResolve();
@@ -107,11 +154,11 @@ export class TextGameEngine
 		else if (seconds > 0)
 		{
 			log(`TextGameEngine: wait - %c${seconds}%csec`, "color:#9881f6", "");
-			this.waitDiv.classList.add("wait-time");
+			this.waitDiv.classList.add("TextGameEngine-wait-time");
 			let promiseResolve: () => void;
 			const onTime = () =>
 			{
-				this.waitDiv.classList.remove("wait-time");
+				this.waitDiv.classList.remove("TextGameEngine-wait-time");
 				log(`TextGameEngine: wait - %c${seconds}%csec-%cresolve%c`, "color:#9881f6", "", "color:lime", "");
 				promiseResolve();
 			}
@@ -169,7 +216,9 @@ export class Titles
 	/**Title of game*/
 	public title = "Text Game Engine";
 	/**Text "Tap to continue" when called TextGameEngine.wait with -1*/
-	public tapToCon = "Tap to continue";
+	public tapToCon = "Tap here to continue";
+	/**Engine version. Assign an empty string to remove version tag.*/
+	public version = "Version: 0.1"; //0.1
 }
 
 class Line
@@ -258,6 +307,15 @@ class LineChoose extends Line
 	}
 }
 
+function Div(classes: string | string[] = [], children: HTMLElement[] = [], text: string = "")
+{
+	const div = document.createElement("div");
+	if (typeof classes == "string") div.classList.add(classes);
+	else classes.forEach(cls => div.classList.add(cls));
+	div.innerText = text;
+	children.forEach(child => div.appendChild(child));
+	return div;
+}
 
 const DEBUG = true;
 function log(...data: any[])
