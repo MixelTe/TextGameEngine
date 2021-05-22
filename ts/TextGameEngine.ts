@@ -11,6 +11,7 @@ export class TextGameEngine
 	 */
 	public init(titles = new Titles()): HTMLDivElement
 	{
+		log("TextGameEngine: init");
 		const mainDiv = document.createElement("div");
 
 		return mainDiv;
@@ -21,6 +22,7 @@ export class TextGameEngine
 	 */
 	public print(text: string = "", newParagraph = false)
 	{
+		log("TextGameEngine: print:", text, "newParagraph:", newParagraph);
 		const line = new LineText(text, newParagraph);
 		this.lines.push(line)
 		this.linesHolder.appendChild(line.mainEl);
@@ -37,6 +39,7 @@ export class TextGameEngine
 		{
 			min = Math.ceil(min);
 			max = Math.floor(max);
+			log("TextGameEngine: num (select)", "min:", min, "max:", max);
 			const options = [];
 			for (let i = min; i <= max; i++) options.push(i);
 			const line = new LineChoose(options);
@@ -46,6 +49,7 @@ export class TextGameEngine
 		}
 		else
 		{
+			log("TextGameEngine: num: min:", min, "max:", max);
 			const line = new LineGetNum(min, max);
 			this.addLine(line);
 			const result = await line.ask();
@@ -59,6 +63,7 @@ export class TextGameEngine
 	 */
 	public async text(max = -1, min = 0, trimSpaces = true, allowSpaces = true)
 	{
+		log("TextGameEngine: text: max:", max, "min:", min, "trimSpaces:", trimSpaces, "allowSpaces:", allowSpaces);
 		const line = new LineGetText(min, max, trimSpaces, allowSpaces);
 		this.addLine(line);
 		const result = await line.ask();
@@ -70,6 +75,7 @@ export class TextGameEngine
 	 */
 	public async choose(options: string[], everyAtNewLine = false)
 	{
+		log("TextGameEngine: choose: newLine:", everyAtNewLine, "options:", options);
 		const line = new LineChoose(options);
 		this.addLine(line);
 		const result = await line.ask();
@@ -82,12 +88,14 @@ export class TextGameEngine
 	{
 		if (seconds < 0)
 		{
+			log("TextGameEngine: wait-inf");
 			this.waitDiv.classList.add("wait-inf");
 			let promiseResolve: () => void;
 			const onClick = () =>
 			{
 				this.waitDiv.classList.remove("wait-inf");
 				this.waitDiv.removeEventListener("click", onClick);
+				log("TextGameEngine: wait-inf-%cresolve%c", "color:lime", "");
 				promiseResolve();
 			}
 			return new Promise<void>((resolve, reject) =>
@@ -98,11 +106,13 @@ export class TextGameEngine
 		}
 		else if (seconds > 0)
 		{
+			log(`TextGameEngine: wait - %c${seconds}%csec`, "color:#9881f6", "");
 			this.waitDiv.classList.add("wait-time");
 			let promiseResolve: () => void;
 			const onTime = () =>
 			{
 				this.waitDiv.classList.remove("wait-time");
+				log(`TextGameEngine: wait - %c${seconds}%csec-%cresolve%c`, "color:#9881f6", "", "color:lime", "");
 				promiseResolve();
 			}
 			return new Promise<void>((resolve, reject) =>
@@ -118,9 +128,14 @@ export class TextGameEngine
 	public clear(lineCount = -1)
 	{
 		const count = lineCount >= 0 ? lineCount : this.lines.length;
+		log(`TextGameEngine: clear - %c${count}%c (%c${lineCount}%c)`, "color:#9881f6", "", "color:#9881f6", "");
 		for (let i = 0; i < count; i++) {
 			const line = this.lines.pop();
-			if (line == undefined) break;
+			if (line == undefined)
+			{
+				log(`TextGameEngine: clear - %cUnexpected break!%c`, "color: red", "");
+				break;
+			}
 
 			line.rejectPromise();
 			this.linesHolder.removeChild(line.mainEl);
@@ -180,10 +195,15 @@ class Line
 	{
 		if (this.resolve != null)
         {
+			log(`Line (${Object.getPrototypeOf(this).constructor.name}): setPromiseResult:`, result);
             this.resolve(result);
             this.reject = undefined;
             this.resolve = undefined;
-        }
+		}
+		else
+		{
+			log(`Line (${Object.getPrototypeOf(this).constructor.name}): %cUnexpected setPromiseResult!%c`, "color: red", "");
+		}
 	}
 	protected createPromise()
 	{
@@ -236,4 +256,11 @@ class LineChoose extends Line
 	{
 		return <Promise<number>>this.createPromise();
 	}
+}
+
+
+const DEBUG = true;
+function log(...data: any[])
+{
+	if (DEBUG) console.log(...data);
 }
