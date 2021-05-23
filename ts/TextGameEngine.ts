@@ -21,7 +21,10 @@ export class TextGameEngine
 					Div("TextGameEngine-title", [], titles.title),
 					themeDiv,
 				]),
-				Div("TextGameEngine-console", [this.linesHolder]),
+				Div("TextGameEngine-console", [
+					Div("TextGameEngine-console-space"),
+					this.linesHolder,
+				]),
 				this.waitDiv,
 			]),
 		]);
@@ -71,8 +74,7 @@ export class TextGameEngine
 	{
 		log("TextGameEngine: print:", text, "newParagraph:", newParagraph);
 		const line = new LineText(text, newParagraph);
-		this.lines.push(line)
-		this.linesHolder.appendChild(line.mainEl);
+		this.addLine(line);
 	}
 	/**
 	 * Ask user for a number
@@ -193,6 +195,7 @@ export class TextGameEngine
 	{
 		this.linesHolder.appendChild(line.mainEl);
 		this.lines.push(line);
+		this.linesHolder.parentElement?.scroll(0, this.linesHolder.clientHeight);
 	}
 }
 
@@ -223,7 +226,7 @@ export class Titles
 
 class Line
 {
-	public mainEl: HTMLDivElement = document.createElement("div");
+	public mainEl: HTMLDivElement = Div("TextGameEngine-line");
 	private resolve: ((result: any) => void) | undefined = undefined;
 	private reject: ((reason?: any) => void) | undefined = undefined;
 
