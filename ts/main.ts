@@ -2,8 +2,7 @@ import { TextGameEngine, Titles } from "./TextGameEngine.js";
 
 const tge = new TextGameEngine();
 const titles = new Titles("Text Game");
-const gameEl = tge.init(titles);
-document.body.appendChild(gameEl);
+tge.init(titles);
 main();
 
 async function main()

@@ -8,9 +8,10 @@ export class TextGameEngine
 
 	/**
 	 * Creates all elements
+	 * @param appendToBody append main HTMLDivElement to body
 	 * @returns Main HTMLDivElement of game
 	 */
-	public init(titles = new Titles()): HTMLDivElement
+	public init(titles = new Titles(), appendToBody = true): HTMLDivElement
 	{
 		log("TextGameEngine: init");
 		const themeDiv = Div("TextGameEngine-theme");
@@ -32,6 +33,7 @@ export class TextGameEngine
 		this.waitDiv.appendChild(Div("TextGameEngine-wait-text", [], titles.tapToCon));
 		for (let i = 0; i < 3; i++) this.waitDiv.appendChild(Div("TextGameEngine-wait-bubble"));
 
+		if (appendToBody) document.body.appendChild(this.mainDiv);
 		return this.mainDiv;
 	}
 	private createThemeSwitch()
