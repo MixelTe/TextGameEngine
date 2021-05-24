@@ -166,8 +166,8 @@ body {
 	background-color: rgb(180, 180, 180);
 }
 .TextGameEngine-line-arrowIn {
-	transition-property: border-color;
-	transition-duration: var(--transition--);
+	transition-property: border-color, transform;
+	transition-duration: var(--transition--), 0.3s;
 	position: relative;
 	display: inline-block;
 	font-size: var(--font-size--);
@@ -190,6 +190,11 @@ body {
     transform: rotate(-45deg);
 	left: -0.14em;
     top: 0.075em;
+}
+.TextGameEngine-line-arrowIn:hover {
+	transition-property: transform;
+	transition-duration: 0.3s;
+	transform: rotate(405deg);
 }
 .TextGameEngine-line-textInput:disabled + .TextGameEngine-line-okButton {
 	visibility: hidden;
