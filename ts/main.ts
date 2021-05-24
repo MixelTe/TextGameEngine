@@ -12,7 +12,7 @@ async function main()
 	tge.clear();
 	tge.print("Hello, it's a cool game!");
 	tge.print("Enter character name:");
-	const name = await tge.text();
+	const name = await tge.text(2);
 	// const name = "Harry";
 	tge.print(`${name} enter the dungeon.`);
 	await tge.wait(2);

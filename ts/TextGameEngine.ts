@@ -107,10 +107,10 @@ export class TextGameEngine
 	}
 	/**
 	 * Ask user for a text
-	 * @param max Max text length, -1 - infinite
 	 * @param min Min text length
+	 * @param max Max text length, -1 - infinite
 	 */
-	public async text(max = -1, min = 0, trimSpaces = true, allowSpaces = true)
+	public async text(min = 0, max = -1, allowSpaces = true, trimSpaces = true)
 	{
 		log("TextGameEngine: text: max:", max, "min:", min, "trimSpaces:", trimSpaces, "allowSpaces:", allowSpaces);
 		const line = new LineGetText(min, max, trimSpaces, allowSpaces);
@@ -271,6 +271,8 @@ class LineText extends Line
 	constructor(text: string, newParagraph: boolean)
 	{
 		super();
+		const className = newParagraph ? "TextGameEngine-line-text-margin" : "TextGameEngine-line-text";
+		this.mainEl.appendChild(Div(className, [], text));
 	}
 }
 class LineGetNum extends Line
@@ -290,6 +292,42 @@ class LineGetText extends Line
 	constructor(min: number, max: number, trimSpaces: boolean, allowSpaces: boolean)
 	{
 		super();
+		const input = document.createElement("input");
+		const okButton = document.createElement("button");
+		const errorDiv = Div("TextGameEngine-line-error");
+		this.mainEl.appendChild(Div("TextGameEngine-line-textIn", [
+			Div("TextGameEngine-line-arrowIn"), input, okButton, errorDiv,
+		]));
+		input.spellcheck = false;
+		input.autofocus = true;
+		input.classList.add("TextGameEngine-line-textInput");
+		okButton.classList.add("TextGameEngine-line-okButton");
+		okButton.innerText = "OK";
+
+		input.addEventListener("input", () =>
+		{
+			if (!allowSpaces) input.value = input.value.replaceAll(" ", "");
+			if (max > 0) input.value = input.value.substring(0, max + 1);
+		});
+		input.addEventListener("change", () =>
+		{
+			if (trimSpaces) input.value = input.value.trim();
+		});
+		input.addEventListener("keyup", (e) =>
+		{
+			if (e.key == "Enter") okButton.click();
+		});
+		okButton.addEventListener("click", () =>
+		{
+			if (input.value.length < min)
+			{
+				errorDiv.innerText = `${input.value.length} < ${min}`;
+				return;
+			}
+			input.disabled = true;
+			errorDiv.innerText = "";
+			this.setPromiseResult(input.value);
+		});
 	}
 
 	public ask(): Promise<string>
