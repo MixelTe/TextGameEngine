@@ -504,7 +504,6 @@ class TextStyles
 		const spSymbol = "&";
 		const result: StyledText[] = [];
 		let styles = new StyledText();
-		let changed = false;
 		let textPart = "";
 		let spSymb = false;
 		let spText = "";
@@ -532,10 +531,23 @@ class TextStyles
 					else if (spText == "b") styles.bold = true;
 					else if (spText == "u") styles.underline = true;
 					else if (spText == "c") styles = new StyledText();
-					else if (!isNaN(num)) styles = this.styles[num] || styles;
+					else if (!isNaN(num))
+					{
+						const newStyles = this.styles[num];
+						if (newStyles != undefined)
+						{
+							if (newStyles.clearPrev) styles = this.styles[num];
+							else
+							{
+								styles.bold = styles.bold || newStyles.bold;
+								styles.italic = styles.italic || newStyles.italic;
+								styles.underline = styles.underline || newStyles.underline;
+								if (newStyles.color != "") styles.color = newStyles.color;
+							}
+						}
+					}
 					else styles.color = spText;
 					spSymb = false;
-					changed = true;
 					spText = "";
 				}
 				else
