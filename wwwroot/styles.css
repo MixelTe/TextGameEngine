@@ -132,7 +132,10 @@ body {
 	/* align-items: center; */
 }
 
-.TextGameEngine-line-textInput {
+.TextGameEngine-line-text-margin {
+	margin-top: 20px;
+}
+.TextGameEngine-line-input {
 	transition-property: background-color, color;
 	transition-duration: var(--transition--);
 	background-color: var(--color-input--);
@@ -146,7 +149,7 @@ body {
 	border-radius: 4px 0px 0px 4px;
 	outline: none;
 }
-.TextGameEngine-line-textInput:disabled {
+.TextGameEngine-line-input:disabled {
 	transition-duration: 0s;
 	border: none;
 	background-color: transparent;
@@ -202,7 +205,7 @@ body {
 	transition-duration: 0.3s;
 	transform: rotate(405deg);
 }
-.TextGameEngine-line-textInput:disabled + .TextGameEngine-line-okButton {
+.TextGameEngine-line-input:disabled + .TextGameEngine-line-okButton {
 	visibility: hidden;
 }
 .TextGameEngine-line-error {

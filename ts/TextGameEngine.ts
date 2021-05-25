@@ -296,6 +296,46 @@ class LineGetNum extends Line
 	constructor(min: number | null, max: number | null)
 	{
 		super();
+		const input = document.createElement("input");
+		const okButton = document.createElement("button");
+		const errorDiv = Div("TextGameEngine-line-error");
+		this.mainEl.appendChild(Div([], [
+			Div("TextGameEngine-line-arrowIn"), input, okButton, errorDiv,
+		]));
+		input.type = "number";
+		input.classList.add("TextGameEngine-line-input");
+		okButton.classList.add("TextGameEngine-line-okButton");
+		okButton.innerText = "OK";
+
+		this.focus = () => { input.focus(); };
+		input.addEventListener("keyup", (e) =>
+		{
+			if (e.key == "Enter") okButton.click();
+		});
+		okButton.addEventListener("click", () =>
+		{
+			if (isNaN(input.valueAsNumber))
+			{
+				errorDiv.innerText = "";
+				input.focus();
+				return;
+			}
+			if (min != null && input.valueAsNumber < min)
+			{
+				errorDiv.innerText = `${input.valueAsNumber} < ${min}`;
+				input.focus();
+				return;
+			}
+			if (max != null && input.valueAsNumber > max)
+			{
+				errorDiv.innerText = `${input.valueAsNumber} > ${max}`;
+				input.focus();
+				return;
+			}
+			input.disabled = true;
+			errorDiv.innerText = "";
+			this.setPromiseResult(input.valueAsNumber);
+		});
 	}
 
 	public ask(): Promise<number>
@@ -311,11 +351,11 @@ class LineGetText extends Line
 		const input = document.createElement("input");
 		const okButton = document.createElement("button");
 		const errorDiv = Div("TextGameEngine-line-error");
-		this.mainEl.appendChild(Div("TextGameEngine-line-textIn", [
+		this.mainEl.appendChild(Div([], [
 			Div("TextGameEngine-line-arrowIn"), input, okButton, errorDiv,
 		]));
 		input.spellcheck = false;
-		input.classList.add("TextGameEngine-line-textInput");
+		input.classList.add("TextGameEngine-line-input");
 		okButton.classList.add("TextGameEngine-line-okButton");
 		okButton.innerText = "OK";
 
@@ -338,6 +378,7 @@ class LineGetText extends Line
 			if (input.value.length < min)
 			{
 				errorDiv.innerText = `${input.value.length} < ${min}`;
+				input.focus();
 				return;
 			}
 			input.disabled = true;
