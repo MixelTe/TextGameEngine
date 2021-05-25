@@ -470,7 +470,34 @@ class TextStyles
 	}
 	public setStyles(styles: string[])
 	{
-
+		for (let i = 0; i < styles.length; i++) {
+			const style = styles[i];
+			const textStyle = new StyledText();
+			let color = "";
+			let colorNow = false;
+			for (let j = 0; j < style.length; j++) {
+				const ch = style[j];
+				if (colorNow)
+				{
+					if (ch == "'") colorNow = false;
+					else color += ch;
+				}
+				else
+				{
+					if (ch == "'") colorNow = true;
+					else
+					{
+						if (ch == "i") textStyle.italic = true;
+						else if (ch == "b") textStyle.bold = true;
+						else if (ch == "u") textStyle.underline = true;
+						else if (ch == "c") textStyle.clearPrev = true;
+						else log(`TextStyles: %cunexpected symbol: ${ch}`, "color: red");
+					}
+				}
+			}
+			textStyle.color = color;
+			this.styles[i] = textStyle;
+		}
 	}
 	private splitText(text: string)
 	{
@@ -551,6 +578,7 @@ class StyledText
 	public underline = false;
 	public color = "";
 	public text = "";
+	public clearPrev = false;
 
 	public copy()
 	{
