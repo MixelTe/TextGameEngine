@@ -12,15 +12,15 @@ body {
 .theme-light {
 	--color-back--: antiquewhite;
 	--color-input--: white;
-	--color-main--: rgb(181, 243, 146);
+	--color-main--: #b5f392;
 	--color-text--: black;
 	--color-choosen-option--: lightgreen;
 }
 .theme-dark {
 	--color-back--: #0d1418;
 	--color-input--: #0b2a3d;
-	--color-main--: rgb(15, 158, 56);
-	--color-text--: rgb(255, 255, 255);
+	--color-main--: #0f9e38;
+	--color-text--: white;
 	--color-choosen-option--: darkgreen;
 }
 

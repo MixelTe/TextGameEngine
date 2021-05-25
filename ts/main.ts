@@ -5,9 +5,7 @@ const titles = new Titles("Text Game");
 tge.setStyles(["'lightgreen'", "cu'red'"]);
 tge.init(titles);
 
-tge.print("&0He^yellow^&ullo&c &b&iworld&1!");
-tge.print("Hello world!");
-// main();
+main();
 
 async function main()
 {

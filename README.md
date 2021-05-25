@@ -5,23 +5,23 @@ Engine for text games
 You can use special symbols in text to add colors and styles to your game.
 
 ### Special symbols:
-Symbol   | Meaning
----------|------------
-&c       | Clear style
-&b       | Bold style
-&i       | Italic style
-&u       | Underline style
-&digit   | your style with this number (0-9) in _styles_
-&&       | & symbol
-^color^  | Color
-^number^ | your style with this number in _styles_
-^^       | ^ symbol
+Symbol       | Meaning
+-------------|------------
+&c           | Clear style
+&b           | Bold style
+&i           | Italic style
+&u           | Underline style
+&__digit__   | your style by this number (0-9) in _styles_
+&&           | & symbol
+^__color__^  | Color
+^__number__^ | your style by this number in _styles_
+^^           | ^ symbol
 
 Set your own styles and colors:
 ```ts
 TextGameEngine.setStyles(styles: string[], useStyles: boolean)
 ```
-_useStyles_ - default true, set to false to disable text formating
+_useStyles_ - default true, set to false to disable text formatting
 
 Strings in _styles_ can contain:
 * c - Clear style
@@ -40,12 +40,37 @@ Text without formating:
 ```ts
 TextGameEngine.print("Hello world!");
 ```
-![Text without formating](url)
+![Text without formating](docs/textWithoutFormating.png)
 
 Text with formating:
 ```ts
 TextGameEngine.setStyles(["'lightgreen'", "cu'red'"]);
 TextGameEngine.print("&0He^yellow^&ullo&c &b&iworld&1!");
 ```
+![Text with formating](docs/textWithFormating.png)
 
-![Text with formating](url)
+```ts
+TextGameEngine.print("&0Hello &uworld!");
+```
+![Text with formating](docs/textWithFormating2.png)
+
+
+## Change Colors
+All colors are in the first lines of the css file.
+``` css
+/* TextGameEngine-styles.css */
+.theme-light {
+	--color-back--: antiquewhite;
+	--color-input--: white;
+	--color-main--: #b5f392;
+	--color-text--: black;
+	--color-choosen-option--: lightgreen;
+}
+.theme-dark {
+	--color-back--: #0d1418;
+	--color-input--: #0b2a3d;
+	--color-main--: #0f9e38;
+	--color-text--: white;
+	--color-choosen-option--: darkgreen;
+}
+```
