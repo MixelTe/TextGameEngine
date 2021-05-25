@@ -136,7 +136,11 @@ body {
 	/* align-items: center; */
 }
 
+.TextGameEngine-line-text {
+	min-height: 1em;
+}
 .TextGameEngine-line-text-margin {
+	min-height: 1em;
 	margin-top: 20px;
 }
 .TextGameEngine-line-input {
