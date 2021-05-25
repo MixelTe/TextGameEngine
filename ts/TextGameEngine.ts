@@ -271,7 +271,7 @@ class Line
 	{
 		if (this.reject != null && this.resolve != null)
         {
-            this.reject("Line removed before resolve");
+            this.reject("TextGameEngine: Line removed before resolve");
             this.reject = undefined;
             this.resolve = undefined;
         }

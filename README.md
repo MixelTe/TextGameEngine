@@ -26,6 +26,7 @@ Parameter    | Default | Description
 -------------|---------|-------------
 text         | ""      | text to print
 newParagraph | false   | add space before text
+![LineText](docs/LineText.png)
 
 ### TextGameEngine.num()
 Ask player for a number
@@ -37,6 +38,7 @@ Parameter | Default | Description
 min       | null    | Min number, null - no limit
 max       | null    | Max number, null - no limit
 useChoose | true    | Use _TextGameEngine.choose()_ if there are less then 16 int options
+![LineGetNum](docs/LineGetNum.png)
 
 ### TextGameEngine.text()
 Ask player for a text
@@ -49,6 +51,7 @@ min         | 0       | Min text length
 max         | -1      | Max text length, -1 - no limit
 allowSpaces | true    | Allow typing spaces
 trimSpaces  | true    | Trim spaces after finishing input
+![LineGetText](docs/LineGetText.png)
 
 ### TextGameEngine.choose()
 Ask player to choose one of the options
@@ -62,6 +65,7 @@ Parameter       | Default | Description
 options         |         | Options to choose
 everyAtNewLine  | false   | Show every option on new line
 removeNotChosen | false   | Remove not chosen options after choice
+![LineChoose](docs/LineChoose.png)
 
 ### TextGameEngine.wait()
 Pause the game for a while.
