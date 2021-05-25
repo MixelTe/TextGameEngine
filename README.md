@@ -9,7 +9,7 @@ tge.init();
 ```
 ### TextGameEngine.init()
 ``` ts
-	const mainDiv = tge.init(titles: Titles, appendToBody: boolean);
+const mainDiv = tge.init(titles: Titles, appendToBody: boolean);
 ```
 * _titles_ - default: new Titles()
 * _appendToBody_ - default: true
@@ -20,7 +20,7 @@ tge.init();
 ### TextGameEngine.print()
 Print text.
 ``` ts
-	tge.print(text: string, newParagraph: boolean);
+tge.print(text: string, newParagraph: boolean);
 ```
 Parameter    | Default | Description
 -------------|---------|-------------
@@ -32,7 +32,7 @@ newParagraph | false   | add space before text
 ### TextGameEngine.num()
 Ask player for a number
 ``` ts
-	const num = await tge.num(min: number | null, max: number | null, useChoose: boolean);
+const num = await tge.num(min: number | null, max: number | null, useChoose: boolean);
 ```
 Parameter | Default | Description
 ----------|---------|-------------
@@ -45,7 +45,7 @@ useChoose | true    | Use _TextGameEngine.choose()_ if there are less then 16 in
 ### TextGameEngine.text()
 Ask player for a text
 ``` ts
-	const num = await tge.text(min: number, max: number, allowSpaces: boolean, trimSpaces: boolean);
+const num = await tge.text(min: number, max: number, allowSpaces: boolean, trimSpaces: boolean);
 ```
 Parameter   | Default | Description
 ------------|---------|-------------
@@ -61,7 +61,7 @@ Ask player to choose one of the options
 
 Returns index of chosen option
 ``` ts
-	const index = await tge.choose(options: string[], everyAtNewLine: boolean, removeNotChosen: boolean);
+const index = await tge.choose(options: string[], everyAtNewLine: boolean, removeNotChosen: boolean);
 ```
 Parameter       | Default | Description
 ----------------|---------|-------------
@@ -74,7 +74,7 @@ removeNotChosen | false   | Remove not chosen options after choice
 ### TextGameEngine.wait()
 Pause the game for a while.
 ``` ts
-	await tge.wait(seconds: number);
+await tge.wait(seconds: number);
 ```
 Parameter       | Default | Description
 ----------------|---------|-------------
@@ -83,7 +83,7 @@ seconds         | -1      | Seconds to wait, -1 - until player tap continue butt
 ### TextGameEngine.clear()
 Remove lines.
 ``` ts
-	tge.clear(lineCount: number);
+tge.clear(lineCount: number);
 ```
 Parameter | Default | Description
 ----------|---------|-------------
