@@ -5,15 +5,17 @@ Engine for text games
 You can use special symbols in text to add colors and styles to your game.
 
 ### Special symbols:
-Symbol      | Meaning
-------------|------------
-&c&         | Clear style
-&b&         | Bold style
-&i&         | Italic style
-&u&         | Underline style
-&color&     | Color
-&&          | & symbol
-&anyNumber& | your style with this number in _styles_
+Symbol   | Meaning
+---------|------------
+&c       | Clear style
+&b       | Bold style
+&i       | Italic style
+&u       | Underline style
+&digit   | your style with this number (0-9) in _styles_
+&&       | & symbol
+^color^  | Color
+^number^ | your style with this number in _styles_
+^^       | ^ symbol
 
 Set your own styles and colors:
 ```ts
@@ -43,7 +45,7 @@ TextGameEngine.print("Hello world!");
 Text with formating:
 ```ts
 TextGameEngine.setStyles(["'lightgreen'", "cu'red'"]);
-TextGameEngine.print("&0&He&yellow&&u&llo&c& &b&&i&world&1&!");
+TextGameEngine.print("&0He^yellow^&ullo&c &b&iworld&1!");
 ```
 
 ![Text with formating](url)

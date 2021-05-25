@@ -491,7 +491,7 @@ class TextStyles
 						else if (ch == "b") textStyle.bold = true;
 						else if (ch == "u") textStyle.underline = true;
 						else if (ch == "c") textStyle.clearPrev = true;
-						else log(`TextStyles: %cunexpected symbol: ${ch}`, "color: red");
+						else log(`TextStyles-setStyles: %cunexpected symbol: ${ch}`, "color: red");
 					}
 				}
 			}
@@ -502,10 +502,12 @@ class TextStyles
 	private splitText(text: string)
 	{
 		const spSymbol = "&";
+		const spSymbol2 = "^";
 		const result: StyledText[] = [];
 		let styles = new StyledText();
 		let textPart = "";
 		let spSymb = false;
+		let spSymb2 = false;
 		let spText = "";
 		const addPart = (text: string) =>
 		{
@@ -513,41 +515,57 @@ class TextStyles
 			part.text = text;
 			result.push(part);
 		}
+		const applyStyle = (styleI: number) =>
+		{
+			const newStyles = this.styles[styleI];
+			if (newStyles != undefined)
+			{
+				if (newStyles.clearPrev) styles = this.styles[styleI];
+				else
+				{
+					styles.bold = styles.bold || newStyles.bold;
+					styles.italic = styles.italic || newStyles.italic;
+					styles.underline = styles.underline || newStyles.underline;
+					if (newStyles.color != "") styles.color = newStyles.color;
+				}
+			}
+		}
 		for (let i = 0; i < text.length; i++) {
 			const ch = text[i];
 			if (spSymb)
 			{
-				if (spText.length == 0 && ch == spSymbol)
+				if (ch == spSymbol)
 				{
 					textPart += ch;
-					continue;
+					spSymb = false;
+					continue
 				}
-				if (ch == spSymbol)
+				const num = parseInt(ch, 10);
+				if (textPart != "") addPart(textPart);
+				textPart = "";
+				if (ch == "i") styles.italic = true;
+				else if (ch == "b") styles.bold = true;
+				else if (ch == "u") styles.underline = true;
+				else if (ch == "c") styles = new StyledText();
+				else if (!isNaN(num)) applyStyle(num);
+				else log(`TextStyles-splitText: %cunexpected symbol: ${ch}`, "color: red");
+				spSymb = false;
+			}
+			else if (spSymb2)
+			{
+				if (ch == spSymbol2 && spText.length == 0)
+				{
+					textPart += ch;
+					spSymb2 = false;
+				}
+				else if (ch == spSymbol2)
 				{
 					if (textPart != "") addPart(textPart);
 					textPart = "";
 					const num = parseInt(spText, 10);
-					if (spText == "i") styles.italic = true;
-					else if (spText == "b") styles.bold = true;
-					else if (spText == "u") styles.underline = true;
-					else if (spText == "c") styles = new StyledText();
-					else if (!isNaN(num))
-					{
-						const newStyles = this.styles[num];
-						if (newStyles != undefined)
-						{
-							if (newStyles.clearPrev) styles = this.styles[num];
-							else
-							{
-								styles.bold = styles.bold || newStyles.bold;
-								styles.italic = styles.italic || newStyles.italic;
-								styles.underline = styles.underline || newStyles.underline;
-								if (newStyles.color != "") styles.color = newStyles.color;
-							}
-						}
-					}
+					if (!isNaN(num)) applyStyle(num)
 					else styles.color = spText;
-					spSymb = false;
+					spSymb2 = false;
 					spText = "";
 				}
 				else
@@ -558,6 +576,7 @@ class TextStyles
 			else
 			{
 				if (ch == spSymbol) spSymb = true;
+				else if (ch == spSymbol2) spSymb2 = true;
 				else textPart += ch;
 			}
 		}
