@@ -14,12 +14,16 @@ body {
 	--color-input--: white;
 	--color-main--: rgb(181, 243, 146);
 	--color-text--: black;
+	--color-choose-option--: white;
+	--color-choosen-option--: lightgreen;
 }
 .theme-dark {
 	--color-back--: #0d1418;
 	--color-input--: #0b2a3d;
 	--color-main--: rgb(15, 158, 56);
 	--color-text--: rgb(255, 255, 255);
+	--color-choose-option--: transparent;
+	--color-choosen-option--: darkgreen;
 }
 
 .TextGameEngine-window {
@@ -212,6 +216,35 @@ body {
 	display: inline-block;
 	margin-left: 10px;
 	color: tomato;
+}
+.TextGameEngine-line-choose {
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.TextGameEngine-line-option {
+	transition-property: border-color, background-color;
+	transition-duration: var(--transition--);
+	background-color: var(--color-choose-option--);
+	border-radius: 10px;
+	border: 2px solid var(--color-text--);
+	padding: 5px;
+	margin: 3px;
+	flex: 1 0 auto;
+	text-align: center;
+	cursor: pointer;
+}
+.TextGameEngine-line-option-disabled {
+	cursor: text;
+}
+.TextGameEngine-line-option-chosen {
+	background-color: var(--color-choosen-option--);
+	cursor: text;
+}
+.TextGameEngine-line-break {
+	flex-basis: 100%;
+	height: 0px;
 }
 
 

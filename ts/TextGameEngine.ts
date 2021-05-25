@@ -105,7 +105,7 @@ export class TextGameEngine
 			log("TextGameEngine: num (select)", "min:", min, "max:", max);
 			const options = [];
 			for (let i = min; i <= max; i++) options.push(i);
-			const line = new LineChoose(options);
+			const line = new LineChoose(options, false, true);
 			this.addLine(line);
 			const result = await line.ask();
 			return options[result];
@@ -134,12 +134,13 @@ export class TextGameEngine
 	}
 	/**
 	 * Ask the user to choose one of the options
+	 * @param removeNotChosen Remove not chosen options after choice
 	 * @returns Index of chosen option
 	 */
-	public async choose(options: string[], everyAtNewLine = false)
+	public async choose(options: string[], everyAtNewLine = false, removeNotChosen = false)
 	{
 		log("TextGameEngine: choose: newLine:", everyAtNewLine, "options:", options);
-		const line = new LineChoose(options);
+		const line = new LineChoose(options, everyAtNewLine, removeNotChosen);
 		this.addLine(line);
 		const result = await line.ask();
 		return result;
@@ -394,9 +395,36 @@ class LineGetText extends Line
 }
 class LineChoose extends Line
 {
-	constructor(options: (string | number)[])
+	constructor(options: (string | number)[], newLine: boolean, removeNotChosen: boolean)
 	{
 		super();
+		const optionsDiv = Div("TextGameEngine-line-choose");
+		const optionEls: HTMLElement[] = [];
+		let chosen = false;
+		for (let i = 0; i < options.length; i++) {
+			const option = options[i];
+			const optionEl = Div("TextGameEngine-line-option", [], `${option}`);
+			optionEls.push(optionEl);
+			if (newLine) optionEls.push(Div("TextGameEngine-line-break"));
+			optionEl.addEventListener("click", () =>
+			{
+				if (chosen) return;
+				chosen = true;
+				optionEls.forEach(el =>
+				{
+					if (el != optionEl)
+					{
+						el.classList.add("TextGameEngine-line-option-disabled");
+						if (removeNotChosen) optionsDiv.removeChild(el);
+					}
+				});
+				optionEl.classList.add("TextGameEngine-line-option-chosen");
+				if (removeNotChosen) optionEl.style.flex = "0 0 auto";
+				this.setPromiseResult(i);
+			});
+		}
+		optionEls.forEach(el => optionsDiv.appendChild(el));
+		this.mainEl.appendChild(optionsDiv);
 	}
 
 	public ask(): Promise<number>
