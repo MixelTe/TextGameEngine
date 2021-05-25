@@ -158,13 +158,19 @@ export class TextGameEngine
 			const onClick = () =>
 			{
 				this.waitDiv.classList.remove("TextGameEngine-wait-inf");
-				this.waitDiv.removeEventListener("click", onClick);
+				window.removeEventListener("click", onClick);
+				this.mainDiv.removeEventListener("keypress", onKeyup);
 				log("TextGameEngine: wait-inf-%cresolve%c", "color:lime", "");
 				promiseResolve();
+			}
+			const onKeyup = (e: KeyboardEvent) =>
+			{
+				if (e.key == "Enter") onClick();
 			}
 			return new Promise<void>((resolve, reject) =>
 			{
 				promiseResolve = resolve;
+				window.addEventListener("keyup", onKeyup);
 				this.waitDiv.addEventListener("click", onClick);
 			});
 		}
