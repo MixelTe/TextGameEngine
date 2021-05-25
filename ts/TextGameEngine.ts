@@ -4,8 +4,17 @@ export class TextGameEngine
 	private linesHolder: HTMLDivElement = Div("TextGameEngine-lines");
 	private waitDiv: HTMLDivElement = Div("TextGameEngine-wait");
 	private mainDiv: HTMLDivElement = Div("TextGameEngine-window");
+	private useStyles = true;
 	private lines: Line[] = [];
 
+	/**
+	 * Engine for text games
+	 * @param useStyles Use special characters in text for colors and styles
+	 */
+	public constructor(useStyles = true)
+	{
+		this.useStyles = useStyles;
+	}
 	/**
 	 * Creates all elements
 	 * @param appendToBody append main HTMLDivElement to body
@@ -19,8 +28,8 @@ export class TextGameEngine
 			Div("TextGameEngine-main", [
 				Div("TextGameEngine-header", [
 					this.createSourceCodeEl(),
-					Div("TextGameEngine-version", [], titles.version),
-					Div("TextGameEngine-title", [], titles.title),
+					Div("TextGameEngine-version", [styleText(titles.version, this.useStyles)]),
+					Div("TextGameEngine-title", [styleText(titles.title, this.useStyles)]),
 					themeDiv,
 				]),
 				Div("TextGameEngine-console", [
@@ -31,7 +40,7 @@ export class TextGameEngine
 			]),
 		]);
 		themeDiv.appendChild(this.createThemeSwitch());
-		this.waitDiv.appendChild(Div("TextGameEngine-wait-text", [], titles.tapToCon));
+		this.waitDiv.appendChild(Div("TextGameEngine-wait-text", [styleText(titles.tapToCon, this.useStyles)]));
 		for (let i = 0; i < 3; i++) this.waitDiv.appendChild(Div("TextGameEngine-wait-bubble"));
 
 		if (appendToBody) document.body.appendChild(this.mainDiv);
@@ -87,7 +96,7 @@ export class TextGameEngine
 	public print(text: string = "", newParagraph = false)
 	{
 		log("TextGameEngine: print:", text, "newParagraph:", newParagraph);
-		const line = new LineText(text, newParagraph);
+		const line = new LineText(text, newParagraph, this.useStyles);
 		this.addLine(line);
 	}
 	/**
@@ -105,7 +114,7 @@ export class TextGameEngine
 			log("TextGameEngine: num (select)", "min:", min, "max:", max);
 			const options = [];
 			for (let i = min; i <= max; i++) options.push(i);
-			const line = new LineChoose(options, false, true);
+			const line = new LineChoose(options, false, true, this.useStyles);
 			this.addLine(line);
 			const result = await line.ask();
 			return options[result];
@@ -140,7 +149,7 @@ export class TextGameEngine
 	public async choose(options: string[], everyAtNewLine = false, removeNotChosen = false)
 	{
 		log("TextGameEngine: choose: newLine:", everyAtNewLine, "options:", options);
-		const line = new LineChoose(options, everyAtNewLine, removeNotChosen);
+		const line = new LineChoose(options, everyAtNewLine, removeNotChosen, this.useStyles);
 		this.addLine(line);
 		const result = await line.ask();
 		return result;
@@ -291,11 +300,11 @@ class Line
 }
 class LineText extends Line
 {
-	constructor(text: string, newParagraph: boolean)
+	constructor(text: string, newParagraph: boolean, useStyles: boolean)
 	{
 		super();
 		const className = newParagraph ? "TextGameEngine-line-text-margin" : "TextGameEngine-line-text";
-		this.mainEl.appendChild(Div(className, [], text));
+		this.mainEl.appendChild(Div(className, [styleText(text, useStyles)]));
 	}
 }
 class LineGetNum extends Line
@@ -401,7 +410,7 @@ class LineGetText extends Line
 }
 class LineChoose extends Line
 {
-	constructor(options: (string | number)[], newLine: boolean, removeNotChosen: boolean)
+	constructor(options: (string | number)[], newLine: boolean, removeNotChosen: boolean, useStyles: boolean)
 	{
 		super();
 		const optionsDiv = Div("TextGameEngine-line-choose");
@@ -409,7 +418,7 @@ class LineChoose extends Line
 		let chosen = false;
 		for (let i = 0; i < options.length; i++) {
 			const option = options[i];
-			const optionEl = Div("TextGameEngine-line-option", [], `${option}`);
+			const optionEl = Div("TextGameEngine-line-option", [styleText(`${option}`, useStyles)]);
 			optionEls.push(optionEl);
 			if (newLine) optionEls.push(Div("TextGameEngine-line-break"));
 			optionEl.addEventListener("click", () =>
@@ -437,6 +446,18 @@ class LineChoose extends Line
 	{
 		return <Promise<number>>this.createPromise();
 	}
+}
+
+function styleText(text: string, useStyles: boolean)
+{
+	const mainDiv = Div();
+	if (!useStyles)
+	{
+		mainDiv.innerText = text;
+		return mainDiv;
+	}
+	mainDiv.innerText = text;
+	return mainDiv;
 }
 
 function Div(classes: string | string[] = [], children: HTMLElement[] = [], text: string = "")
