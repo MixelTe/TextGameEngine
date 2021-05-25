@@ -462,13 +462,10 @@ class TextStyles
 			mainDiv.innerText = text;
 			return mainDiv;
 		}
-		let html = "";
-		html = text
-
 		const splited = this.splitText(text);
-		console.log(splited);
+		const els = this.createHtml(splited);
 
-		mainDiv.innerHTML = html;
+		els.forEach(el => mainDiv.appendChild(el));
 		return mainDiv;
 	}
 	public setStyles(styles: string[])
@@ -528,6 +525,23 @@ class TextStyles
 		if (textPart != "") addPart(textPart);
 		if (spText != "") addPart(spText);
 		return result;
+	}
+	private createHtml(parts: StyledText[])
+	{
+		const els: HTMLSpanElement[] = [];
+
+		for (let i = 0; i < parts.length; i++) {
+			const part = parts[i];
+			const span = document.createElement("span");
+			els.push(span);
+			span.innerText = part.text;
+			if (part.bold) span.style.fontWeight = "bolder";
+			if (part.italic) span.style.fontStyle = "italic";
+			if (part.underline) span.style.textDecoration = "underline";
+			if (part.color != "") span.style.color = part.color;
+		}
+
+		return els;
 	}
 }
 class StyledText

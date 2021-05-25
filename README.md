@@ -43,7 +43,7 @@ TextGameEngine.print("Hello world!");
 Text with formating:
 ```ts
 TextGameEngine.setStyles(["'lightgreen'", "cu'red'"]);
-TextGameEngine.print("&0&He&yellow&llo &b&&i&world&1&!");
+TextGameEngine.print("&0&He&yellow&&u&llo&c& &b&&i&world&1&!");
 ```
 
 ![Text with formating](url)
