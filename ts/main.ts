@@ -2,8 +2,12 @@ import { TextGameEngine, Titles } from "./TextGameEngine.js";
 
 const tge = new TextGameEngine();
 const titles = new Titles("Text Game");
+tge.setStyles(["'lightgreen'", "cu'red'"]);
 tge.init(titles);
-main();
+
+tge.print("&0&He&yellow&llo &b&&i&world&1&!");
+tge.print("Hello world!");
+// main();
 
 async function main()
 {

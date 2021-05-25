@@ -4,17 +4,9 @@ export class TextGameEngine
 	private linesHolder: HTMLDivElement = Div("TextGameEngine-lines");
 	private waitDiv: HTMLDivElement = Div("TextGameEngine-wait");
 	private mainDiv: HTMLDivElement = Div("TextGameEngine-window");
-	private useStyles = true;
+	private styles = new TextStyles();
 	private lines: Line[] = [];
 
-	/**
-	 * Engine for text games
-	 * @param useStyles Use special characters in text for colors and styles
-	 */
-	public constructor(useStyles = true)
-	{
-		this.useStyles = useStyles;
-	}
 	/**
 	 * Creates all elements
 	 * @param appendToBody append main HTMLDivElement to body
@@ -28,8 +20,8 @@ export class TextGameEngine
 			Div("TextGameEngine-main", [
 				Div("TextGameEngine-header", [
 					this.createSourceCodeEl(),
-					Div("TextGameEngine-version", [styleText(titles.version, this.useStyles)]),
-					Div("TextGameEngine-title", [styleText(titles.title, this.useStyles)]),
+					Div("TextGameEngine-version", [this.styles.style(titles.version)]),
+					Div("TextGameEngine-title", [this.styles.style(titles.title)]),
 					themeDiv,
 				]),
 				Div("TextGameEngine-console", [
@@ -40,7 +32,7 @@ export class TextGameEngine
 			]),
 		]);
 		themeDiv.appendChild(this.createThemeSwitch());
-		this.waitDiv.appendChild(Div("TextGameEngine-wait-text", [styleText(titles.tapToCon, this.useStyles)]));
+		this.waitDiv.appendChild(Div("TextGameEngine-wait-text", [this.styles.style(titles.tapToCon)]));
 		for (let i = 0; i < 3; i++) this.waitDiv.appendChild(Div("TextGameEngine-wait-bubble"));
 
 		if (appendToBody) document.body.appendChild(this.mainDiv);
@@ -90,13 +82,22 @@ export class TextGameEngine
 		return sourceCode;
 	}
 	/**
+	 * Set styles that wil be used with &number&
+	 * @param useStyles Set to false to disable text formating
+	 */
+	public setStyles(styles: string[], useStyles = true)
+	{
+		this.styles.setStyles(styles);
+		this.styles.useStyles = useStyles;
+	}
+	/**
 	 * Print text to console
 	 * @param newParagraph Add space after previous text
 	 */
 	public print(text: string = "", newParagraph = false)
 	{
 		log("TextGameEngine: print:", text, "newParagraph:", newParagraph);
-		const line = new LineText(text, newParagraph, this.useStyles);
+		const line = new LineText(text, newParagraph, this.styles);
 		this.addLine(line);
 	}
 	/**
@@ -114,7 +115,7 @@ export class TextGameEngine
 			log("TextGameEngine: num (select)", "min:", min, "max:", max);
 			const options = [];
 			for (let i = min; i <= max; i++) options.push(i);
-			const line = new LineChoose(options, false, true, this.useStyles);
+			const line = new LineChoose(options, false, true, this.styles);
 			this.addLine(line);
 			const result = await line.ask();
 			return options[result];
@@ -149,7 +150,7 @@ export class TextGameEngine
 	public async choose(options: string[], everyAtNewLine = false, removeNotChosen = false)
 	{
 		log("TextGameEngine: choose: newLine:", everyAtNewLine, "options:", options);
-		const line = new LineChoose(options, everyAtNewLine, removeNotChosen, this.useStyles);
+		const line = new LineChoose(options, everyAtNewLine, removeNotChosen, this.styles);
 		this.addLine(line);
 		const result = await line.ask();
 		return result;
@@ -300,11 +301,11 @@ class Line
 }
 class LineText extends Line
 {
-	constructor(text: string, newParagraph: boolean, useStyles: boolean)
+	constructor(text: string, newParagraph: boolean, styles: TextStyles)
 	{
 		super();
 		const className = newParagraph ? "TextGameEngine-line-text-margin" : "TextGameEngine-line-text";
-		this.mainEl.appendChild(Div(className, [styleText(text, useStyles)]));
+		this.mainEl.appendChild(Div(className, [styles.style(text)]));
 	}
 }
 class LineGetNum extends Line
@@ -410,7 +411,7 @@ class LineGetText extends Line
 }
 class LineChoose extends Line
 {
-	constructor(options: (string | number)[], newLine: boolean, removeNotChosen: boolean, useStyles: boolean)
+	constructor(options: (string | number)[], newLine: boolean, removeNotChosen: boolean, styles: TextStyles)
 	{
 		super();
 		const optionsDiv = Div("TextGameEngine-line-choose");
@@ -418,7 +419,7 @@ class LineChoose extends Line
 		let chosen = false;
 		for (let i = 0; i < options.length; i++) {
 			const option = options[i];
-			const optionEl = Div("TextGameEngine-line-option", [styleText(`${option}`, useStyles)]);
+			const optionEl = Div("TextGameEngine-line-option", [styles.style(`${option}`)]);
 			optionEls.push(optionEl);
 			if (newLine) optionEls.push(Div("TextGameEngine-line-break"));
 			optionEl.addEventListener("click", () =>
@@ -448,16 +449,105 @@ class LineChoose extends Line
 	}
 }
 
-function styleText(text: string, useStyles: boolean)
+class TextStyles
 {
-	const mainDiv = Div();
-	if (!useStyles)
+	public useStyles = true;
+	public styles: StyledText[] = [];
+
+	public style(text: string)
 	{
-		mainDiv.innerText = text;
+		const mainDiv = Div();
+		if (!this.useStyles)
+		{
+			mainDiv.innerText = text;
+			return mainDiv;
+		}
+		let html = "";
+		html = text
+
+		const splited = this.splitText(text);
+		console.log(splited);
+
+		mainDiv.innerHTML = html;
 		return mainDiv;
 	}
-	mainDiv.innerText = text;
-	return mainDiv;
+	public setStyles(styles: string[])
+	{
+
+	}
+	private splitText(text: string)
+	{
+		const spSymbol = "&";
+		const result: StyledText[] = [];
+		let styles = new StyledText();
+		let changed = false;
+		let textPart = "";
+		let spSymb = false;
+		let spText = "";
+		const addPart = (text: string) =>
+		{
+			const part = styles.copy();
+			part.text = text;
+			result.push(part);
+		}
+		for (let i = 0; i < text.length; i++) {
+			const ch = text[i];
+			if (spSymb)
+			{
+				if (spText.length == 0 && ch == spSymbol)
+				{
+					textPart += ch;
+					continue;
+				}
+				if (ch == spSymbol)
+				{
+					if (textPart != "") addPart(textPart);
+					textPart = "";
+					const num = parseInt(spText, 10);
+					if (spText == "i") styles.italic = true;
+					else if (spText == "b") styles.bold = true;
+					else if (spText == "u") styles.underline = true;
+					else if (spText == "c") styles = new StyledText();
+					else if (!isNaN(num)) styles = this.styles[num] || styles;
+					else styles.color = spText;
+					spSymb = false;
+					changed = true;
+					spText = "";
+				}
+				else
+				{
+					spText += ch;
+				}
+			}
+			else
+			{
+				if (ch == spSymbol) spSymb = true;
+				else textPart += ch;
+			}
+		}
+		if (textPart != "") addPart(textPart);
+		if (spText != "") addPart(spText);
+		return result;
+	}
+}
+class StyledText
+{
+	public italic = false;
+	public bold = false;
+	public underline = false;
+	public color = "";
+	public text = "";
+
+	public copy()
+	{
+		const newText = new StyledText();
+		newText.italic = this.italic;
+		newText.bold = this.bold;
+		newText.underline = this.underline;
+		newText.color = this.color;
+		newText.text = this.text;
+		return newText;
+	}
 }
 
 function Div(classes: string | string[] = [], children: HTMLElement[] = [], text: string = "")
