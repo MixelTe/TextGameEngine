@@ -13,27 +13,31 @@ async function main()
 	tge.print("Enter character name:");
 	const name = await tge.text(2);
 	// const name = "Harry";
-	tge.print(`${name} enter the dungeon.`);
-	await tge.wait(2);
-	tge.print(`${name} notice something!`);
-	await tge.wait(2);
+	tge.print(`${name} enters the dungeon.`);
+	await tge.wait(1);
+	tge.print(`${name} noticed something!`);
+	await tge.wait(1);
 	tge.print("It's a door!");
 	tge.print("There is a question on the door:");
-	if (!true)
+	if (!false)
 	{
 		let answer = 0;
+		let firstMistake = true;
+		tge.print("What is 2+2?", true);
+		answer = await tge.num();
 		while (answer != 4)
 		{
-			tge.print("What is 2+2?", true);
-			let answer = await tge.num();
-			if (answer == 4) break;
-			tge.clear(1);
-			tge.print('You hear: "Wrong answer!". Try again.');
+			tge.clear(firstMistake ? 2 : 3);
+			firstMistake = false;
+			tge.print('You hear: "Wrong answer!". Try again.', true);
+			tge.print("What is 2+2?");
+			answer = await tge.num();
 		}
 	}
 	else
 	{
-		const answer = await tge.num();
+		tge.print("What is 2+2?", true);
+		const answer = await tge.num(2, 20);
 		if (answer != 4) tge.print(`You hear: "Wrong answer! But I'm kind today"`);
 	}
 	tge.print(`The door opened and ${name} entered the room.`);
@@ -55,7 +59,7 @@ async function main()
 	tge.clear();
 
 	tge.print("You are at home.");
-	tge.print(`${name} are hungry.`);
+	tge.print(`${name} is hungry.`);
 	tge.print(`${name} goes to the kitchen.`);
 	await tge.wait(2);
 	tge.print(`${name} poured tea, and puts sugar.`);
@@ -64,7 +68,7 @@ async function main()
 	tge.print(`${name} puts ${sugar} sugar cubes.`);
 	await tge.wait(2);
 	tge.print(`${name} sat down on the sofa and turned on the TV.`);
-	tge.print(`Which channel should he turn on?`);
+	tge.print(`Which channel should he turns on?`);
 	const chanel = await tge.num(1, 15);
 	tge.print(`${name} turned on channel ${chanel} and began to calmly drink tea.`);
 

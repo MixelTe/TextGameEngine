@@ -229,7 +229,7 @@ body {
 	background-color: var(--color-choose-option--);
 	border-radius: 10px;
 	border: 2px solid var(--color-text--);
-	padding: 5px;
+	padding: 5px 7px 5px 7px;
 	margin: 3px;
 	flex: 1 0 auto;
 	text-align: center;
