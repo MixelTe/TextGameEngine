@@ -253,7 +253,7 @@ export class Titles
 	/**Text "Tap to continue" when called TextGameEngine.wait with -1*/
 	public tapToCon = "Tap here to continue";
 	/**Engine version. Assign an empty string to remove version tag.*/
-	public version = "Version: 1.0"; //1.0
+	public version = "Version: 1.1"; //1.1
 }
 
 class Line
