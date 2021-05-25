@@ -210,6 +210,7 @@ export class TextGameEngine
 		this.linesHolder.appendChild(line.mainEl);
 		this.lines.push(line);
 		this.linesHolder.parentElement?.scroll(0, this.linesHolder.clientHeight);
+		line.focus();
 	}
 }
 
@@ -243,6 +244,7 @@ class Line
 	public mainEl: HTMLDivElement = Div("TextGameEngine-line");
 	private resolve: ((result: any) => void) | undefined = undefined;
 	private reject: ((reason?: any) => void) | undefined = undefined;
+	public focus() { };
 
 	public ask(): Promise<any>
 	{
@@ -313,11 +315,11 @@ class LineGetText extends Line
 			Div("TextGameEngine-line-arrowIn"), input, okButton, errorDiv,
 		]));
 		input.spellcheck = false;
-		input.autofocus = true;
 		input.classList.add("TextGameEngine-line-textInput");
 		okButton.classList.add("TextGameEngine-line-okButton");
 		okButton.innerText = "OK";
 
+		this.focus = () => { input.focus(); };
 		input.addEventListener("input", () =>
 		{
 			if (!allowSpaces) input.value = input.value.replaceAll(" ", "");
