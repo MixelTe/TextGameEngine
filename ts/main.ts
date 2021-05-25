@@ -2,7 +2,7 @@ import { TextGameEngine, Titles } from "./TextGameEngine.js";
 
 const tge = new TextGameEngine();
 const titles = new Titles("Text Game");
-tge.setStyles(["'lightgreen'", "cu'red'"]);
+tge.setStyles(["cb'red'"]);
 tge.init(titles);
 
 main();
@@ -31,7 +31,7 @@ async function main()
 		{
 			tge.clear(firstMistake ? 2 : 3);
 			firstMistake = false;
-			tge.print('You hear: "Wrong answer!". Try again.', true);
+			tge.print('You hear: "&0Wrong answer!&c". Try again.', true);
 			tge.print("What is 2+2?");
 			answer = await tge.num();
 		}
@@ -51,9 +51,10 @@ async function main()
 	await tge.wait(2);
 	tge.print("There are three potions of different colors on the table");
 	tge.print(`What potion will you drink?`, true);
-	const potions = ["Red", "Blue", "Green"];
-	const potionI = await tge.choose(potions);
-	tge.print(`${name} drinks ${potions[potionI].toLowerCase()} potion`, true);
+	const potionsF = ["^red^Red", "^blue^Blue", "^green^Green"];
+	const potions = ["red", "blue", "green"];
+	const potionI = await tge.choose(potionsF);
+	tge.print(`${name} drinks ${potions[potionI]} potion`, true);
 	await tge.wait();
 	if (Math.random() >= 0.5) tge.print(`${name} opened eyes in the bed.`);
 	else tge.print(`${name} went home happy.`);

@@ -101,7 +101,7 @@ export class TextGameEngine
 		this.addLine(line);
 	}
 	/**
-	 * Ask user for a number
+	 * Ask player for a number
 	 * @param min Min number, null - no limit
 	 * @param max Max number, null - no limit
 	 * @param useChoose Use choose if there are less then 16 int options
@@ -130,9 +130,9 @@ export class TextGameEngine
 		}
 	}
 	/**
-	 * Ask user for a text
+	 * Ask player for a text
 	 * @param min Min text length
-	 * @param max Max text length, -1 - infinite
+	 * @param max Max text length, -1 - no limit
 	 */
 	public async text(min = 0, max = -1, allowSpaces = true, trimSpaces = true)
 	{
@@ -143,7 +143,7 @@ export class TextGameEngine
 		return result;
 	}
 	/**
-	 * Ask the user to choose one of the options
+	 * Ask the player to choose one of the options
 	 * @param removeNotChosen Remove not chosen options after choice
 	 * @returns Index of chosen option
 	 */
@@ -156,7 +156,7 @@ export class TextGameEngine
 		return result;
 	}
 	/**
-	 * @param seconds Seconds to wait, -1 - until user tap continue button
+	 * @param seconds Seconds to wait, -1 - until player tap continue button
 	 */
 	public async wait(seconds = -1)
 	{
