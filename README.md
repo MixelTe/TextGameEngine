@@ -3,6 +3,8 @@ Engine for text games
 
 [How to use](https://github.com/MixelTe/TextGameEngine/wiki/How-to-use)
 
+[Full documentation](https://github.com/MixelTe/TextGameEngine/wiki/Full-documentation)
+
 ## Initialization
 ``` js
 import { TextGameEngine, Titles } from "./TextGameEngine.js";
