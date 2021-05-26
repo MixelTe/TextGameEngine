@@ -1,6 +1,8 @@
 # TextGameEngine
 Engine for text games
 
+[How to use](https://github.com/MixelTe/TextGameEngine/wiki/How-to-use)
+
 ## Initialization
 ``` js
 import { TextGameEngine, Titles } from "./TextGameEngine.js";
