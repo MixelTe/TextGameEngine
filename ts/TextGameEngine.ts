@@ -169,18 +169,18 @@ export class TextGameEngine
 			{
 				this.waitDiv.classList.remove("TextGameEngine-wait-inf");
 				window.removeEventListener("click", onClick);
-				this.mainDiv.removeEventListener("keypress", onKeyup);
+				this.mainDiv.removeEventListener("keypress", onKeypress);
 				log("TextGameEngine: wait-inf-%cresolve%c", "color:lime", "");
 				promiseResolve();
 			}
-			const onKeyup = (e: KeyboardEvent) =>
+			const onKeypress = (e: KeyboardEvent) =>
 			{
 				if (e.key == "Enter") onClick();
 			}
 			return new Promise<void>((resolve, reject) =>
 			{
 				promiseResolve = resolve;
-				window.addEventListener("keyup", onKeyup);
+				window.addEventListener("keypress", onKeypress);
 				this.waitDiv.addEventListener("click", onClick);
 			});
 		}
@@ -468,6 +468,13 @@ class TextStyles
 		els.forEach(el => mainDiv.appendChild(el));
 		return mainDiv;
 	}
+	public removeFormating(text: string)
+	{
+		const splited = this.splitText(text);
+		let clearText = "";
+		splited.forEach(part => clearText += part.text);
+		return clearText;
+	}
 	public setStyles(styles: string[])
 	{
 		for (let i = 0; i < styles.length; i++) {
@@ -633,7 +640,7 @@ function Div(classes: string | string[] = [], children: HTMLElement[] = [], text
 	return div;
 }
 
-const DEBUG = true;
+const DEBUG = false;
 function log(...data: any[])
 {
 	if (DEBUG) console.log(...data);
