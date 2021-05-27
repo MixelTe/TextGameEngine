@@ -516,6 +516,10 @@ class TextStyles
 		let spSymb = false;
 		let spSymb2 = false;
 		let spText = "";
+		let escapeCh = false;
+		let link = 0;
+		let linkText = ["", ""];
+		let returnPoint = -1;
 		const addPart = (text: string) =>
 		{
 			const part = styles.copy();
@@ -541,12 +545,6 @@ class TextStyles
 			const ch = text[i];
 			if (spSymb)
 			{
-				if (ch == spSymbol)
-				{
-					textPart += ch;
-					spSymb = false;
-					continue
-				}
 				const num = parseInt(ch, 10);
 				if (textPart != "") addPart(textPart);
 				textPart = "";
@@ -555,16 +553,23 @@ class TextStyles
 				else if (ch == "u") styles.underline = true;
 				else if (ch == "c") styles = new StyledText();
 				else if (!isNaN(num)) applyStyle(num);
-				else log(`TextStyles-splitText: %cunexpected symbol: ${ch}`, "color: red");
+				else { textPart += spSymbol; i -= 1; };
 				spSymb = false;
 			}
 			else if (spSymb2)
 			{
 				if (ch == spSymbol2 && spText.length == 0)
 				{
-					textPart += ch;
+					i -= 1;
 					spSymb2 = false;
 				}
+				if (escapeCh)
+				{
+					spText += ch;
+					escapeCh = false;
+					continue
+				}
+				if (ch == "\\") escapeCh = true;
 				else if (ch == spSymbol2)
 				{
 					if (textPart != "") addPart(textPart);
@@ -574,21 +579,67 @@ class TextStyles
 					else styles.color = spText;
 					spSymb2 = false;
 					spText = "";
+					returnPoint = -1;
 				}
 				else
 				{
 					spText += ch;
 				}
 			}
+			else if (link)
+			{
+				if (escapeCh)
+				{
+					linkText[0] += ch;
+					escapeCh = false;
+					continue
+				}
+				if (ch == "\\") escapeCh = true;
+				else if (link == 1)
+				{
+					if (ch == ":") link = 2;
+					else linkText[0] += ch;
+				}
+				else if (link == 2)
+				{
+					if (ch == "]")
+					{
+						styles.link = linkText[1];
+						addPart(linkText[0]);
+						linkText = ["", ""];
+						link = 0;
+						returnPoint = -1;
+					}
+					else linkText[1] += ch;
+				}
+			}
 			else
 			{
-				if (ch == spSymbol) spSymb = true;
-				else if (ch == spSymbol2) spSymb2 = true;
+				if (escapeCh)
+				{
+					textPart += ch;
+					escapeCh = false;
+					continue
+				}
+				if (ch == "\\") escapeCh = true;
+				else if (ch == "[") { link = 1; returnPoint = i; }
+				else if (ch == spSymbol) spSymb = true;
+				else if (ch == spSymbol2) { spSymb2 = true; returnPoint = i; }
 				else textPart += ch;
+			}
+			if (returnPoint != -1 && i == text.length - 1)
+			{
+				i = returnPoint;
+				textPart += text[i];
+				returnPoint = -1;
+				spSymb = false;
+				spSymb2 = false;
+				link = 0;
+				linkText = ["", ""];
+				spText = "";
 			}
 		}
 		if (textPart != "") addPart(textPart);
-		if (spText != "") addPart(spText);
 		return result;
 	}
 	private createHtml(parts: StyledText[])
@@ -597,13 +648,26 @@ class TextStyles
 
 		for (let i = 0; i < parts.length; i++) {
 			const part = parts[i];
-			const span = document.createElement("span");
-			els.push(span);
-			span.innerText = part.text;
-			if (part.bold) span.style.fontWeight = "bolder";
-			if (part.italic) span.style.fontStyle = "italic";
-			if (part.underline) span.style.textDecoration = "underline";
-			if (part.color != "") span.style.color = part.color;
+			if (part.link == "")
+			{
+				const span = document.createElement("span");
+				els.push(span);
+				span.innerText = part.text;
+				if (part.bold) span.style.fontWeight = "bolder";
+				if (part.italic) span.style.fontStyle = "italic";
+				if (part.underline) span.style.textDecoration = "underline";
+				if (part.color != "") span.style.color = part.color;
+			}
+			else
+			{
+				const a = document.createElement("a");
+				els.push(a);
+				a.innerText = part.text;
+				a.href = part.link;
+				a.target = "_blank";
+				a.title = part.link;
+				a.classList.add("TextGameEngine-link");
+			}
 		}
 
 		return els;
@@ -617,6 +681,7 @@ class StyledText
 	public color = "";
 	public text = "";
 	public clearPrev = false;
+	public link = "";
 
 	public copy()
 	{
@@ -626,6 +691,7 @@ class StyledText
 		newText.underline = this.underline;
 		newText.color = this.color;
 		newText.text = this.text;
+		newText.link = this.link;
 		return newText;
 	}
 }

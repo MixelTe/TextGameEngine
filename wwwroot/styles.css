@@ -14,6 +14,7 @@ body {
 	--color-input--: white;
 	--color-main--: #b5f392;
 	--color-text--: black;
+	--color-link--: blue;
 	--color-choosen-option--: lightgreen;
 }
 .theme-dark {
@@ -21,6 +22,7 @@ body {
 	--color-input--: #0b2a3d;
 	--color-main--: #0f9e38;
 	--color-text--: white;
+	--color-link--: #00ffff;
 	--color-choosen-option--: darkgreen;
 }
 
@@ -247,6 +249,16 @@ body {
 .TextGameEngine-line-break {
 	flex-basis: 100%;
 	height: 0px;
+}
+
+.TextGameEngine-link {
+	transition-property: color;
+	transition-duration: var(--transition--);
+	color: var(--color-link--);
+	text-decoration-skip-ink: none;
+}
+.TextGameEngine-link:hover {
+	text-shadow: 3px -3px 3px var(--color-text--);
 }
 
 

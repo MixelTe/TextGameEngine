@@ -113,17 +113,19 @@ version  | Engine version. Assign an empty string to remove version tag from pag
 You can use special symbols in text to add colors and styles to your game.
 
 ### Special symbols:
-Symbol       | Meaning
--------------|------------
-&c           | Clear style
-&b           | Bold style
-&i           | Italic style
-&u           | Underline style
-&__digit__   | your style by this number (0-9) in _styles_
-&&           | & symbol
-^__color__^  | Color
-^__number__^ | your style by this number in _styles_
-^^           | ^ symbol
+Symbol           | Meaning
+-----------------|------------
+&c               | Clear style
+&b               | Bold style
+&i               | Italic style
+&u               | Underline style
+&__digit__       | your style by this number (0-9) in _styles_
+\\&              | & symbol
+^__color__^      | Color
+^__number__^     | your style by this number in _styles_
+\\^              | ^ symbol
+\[linkText:link] | Link
+\\[text:text]    | Not link
 
 Set your own styles and colors:
 ```ts
@@ -174,6 +176,7 @@ All colors are in the first lines of the css file.
 	--color-input--: white;
 	--color-main--: #b5f392;
 	--color-text--: black;
+	--color-link--: blue;
 	--color-choosen-option--: lightgreen;
 }
 .theme-dark {
@@ -181,6 +184,7 @@ All colors are in the first lines of the css file.
 	--color-input--: #0b2a3d;
 	--color-main--: #0f9e38;
 	--color-text--: white;
+	--color-link--: #00ffff;
 	--color-choosen-option--: darkgreen;
 }
 ```
