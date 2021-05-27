@@ -604,8 +604,11 @@ class TextStyles
 				{
 					if (ch == "]")
 					{
+						if (textPart != "") addPart(textPart);
+						textPart = "";
 						styles.link = linkText[1];
 						addPart(linkText[0]);
+						styles.link = "";
 						linkText = ["", ""];
 						link = 0;
 						returnPoint = -1;
