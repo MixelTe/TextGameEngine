@@ -468,7 +468,7 @@ class TextStyles
 		els.forEach(el => mainDiv.appendChild(el));
 		return mainDiv;
 	}
-	public removeFormating(text: string)
+	public removeFormatting(text: string)
 	{
 		const splited = this.splitText(text);
 		let clearText = "";
