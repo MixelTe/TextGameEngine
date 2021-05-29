@@ -91,6 +91,9 @@ body {
 	align-items: center;
 	visibility: hidden;
 }
+.TextGameEngine-popup-show {
+	visibility: visible;
+}
 .TextGameEngine-popup-container {
 	position: relative;
 	width: 100%;

@@ -100,11 +100,12 @@ export class TextGameEngine
 		circle.setAttribute("cy", "162.84");
 		circle.setAttribute("r", "27");
 		svg.classList.add("TextGameEngine-inf");
-		svg.addEventListener("click", () => { });
+		svg.addEventListener("click", this.openInf.bind(this));
 		return svg;
 	}
 	private createPopup(titles: Titles)
 	{
+		const close = Div("TextGameEngine-popup-close", [], "×");
 		this.popup = Div("TextGameEngine-popup", [
 			Div("TextGameEngine-popup-container", [
 				Div("TextGameEngine-popup-title", [this.styles.style(titles.title)]),
@@ -116,11 +117,29 @@ export class TextGameEngine
 					this.createSourceCodeEl(),
 					Div([], [], `Text Game Engine: version ${version}`),
 				]),
-				Div("TextGameEngine-popup-close", [], "×"),
+				close,
 			]),
 		]);
+		close.addEventListener("click", this.closeInf.bind(this));
+		this.popup.addEventListener("click", (e) =>
+		{
+			if (e.target == this.popup) this.closeInf();
+		});
+		window.addEventListener("keyup", (e) =>
+		{
+			if (e.key == "Escape") this.closeInf();
+		});
 
 		return this.popup;
+	}
+	/**Open information pop-up*/
+	public openInf()
+	{
+		this.popup.classList.add("TextGameEngine-popup-show");
+	}
+	private closeInf()
+	{
+		this.popup.classList.remove("TextGameEngine-popup-show");
 	}
 	/**
 	 * HTMLDivElement where you can add any information
