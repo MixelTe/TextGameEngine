@@ -655,6 +655,7 @@ class TextStyles
 			{
 				const span = document.createElement("span");
 				els.push(span);
+				span.classList.add("TextGameEngine-span");
 				span.innerText = part.text;
 				if (part.bold) span.style.fontWeight = "bolder";
 				if (part.italic) span.style.fontStyle = "italic";

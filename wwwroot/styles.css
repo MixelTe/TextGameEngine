@@ -141,7 +141,7 @@ body {
 }
 .TextGameEngine-line-text-margin {
 	min-height: 1em;
-	margin-top: 20px;
+	margin-top: 25px;
 }
 .TextGameEngine-line-input {
 	transition-property: background-color, color;
@@ -260,7 +260,9 @@ body {
 .TextGameEngine-link:hover {
 	text-shadow: 3px -3px 3px var(--color-text--);
 }
-
+.TextGameEngine-span {
+	white-space: break-spaces;
+}
 
 
 .TextGameEngine-wait {
