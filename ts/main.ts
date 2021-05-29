@@ -5,6 +5,14 @@ const titles = new Titles("Text Game");
 tge.setStyles(["cb'red'"]);
 tge.init(titles);
 
+const infDiv = tge.getInfDiv();
+for (let i = 0; i < 2; i++)
+{
+	const div = document.createElement("div");
+	div.innerText = "Cras efficitur rhoncus lectus, et convallis nulla tincidunt a. Curabitur interdum molestie ante, in tempus leo consectetur vitae. Curabitur id fringilla quam, nec fringilla metus. Ut vitae sollicitudin est. Suspendisse elit leo, rhoncus quis dignissim at, mollis eget diam. Ut gravida sem sed turpis iaculis, ut pharetra nunc gravida. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.";
+	infDiv.appendChild(div);
+}
+
 main();
 
 async function main()

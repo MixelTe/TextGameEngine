@@ -1,9 +1,12 @@
+const version = "1.2";
 /** Engine for text games*/
 export class TextGameEngine
 {
 	private linesHolder: HTMLDivElement = Div("TextGameEngine-lines");
 	private waitDiv: HTMLDivElement = Div("TextGameEngine-wait");
 	private mainDiv: HTMLDivElement = Div("TextGameEngine-window");
+	private infDiv: HTMLDivElement = Div();
+	private popup: HTMLDivElement = Div();
 	private styles = new TextStyles();
 	private lines: Line[] = [];
 
@@ -19,8 +22,7 @@ export class TextGameEngine
 		this.mainDiv = Div("TextGameEngine-window", [
 			Div("TextGameEngine-main", [
 				Div("TextGameEngine-header", [
-					this.createSourceCodeEl(),
-					Div("TextGameEngine-version", [this.styles.style(titles.version)]),
+					this.createInfEl(),
 					Div("TextGameEngine-title", [this.styles.style(titles.title)]),
 					themeDiv,
 				]),
@@ -30,6 +32,7 @@ export class TextGameEngine
 				]),
 				this.waitDiv,
 			]),
+			this.createPopup(titles),
 		]);
 		themeDiv.appendChild(this.createThemeSwitch());
 		this.waitDiv.appendChild(Div("TextGameEngine-wait-text", [this.styles.style(titles.tapToCon)]));
@@ -80,6 +83,51 @@ export class TextGameEngine
 			open("https://github.com/MixelTe/TextGameEngine", "_blank");
 		});
 		return sourceCode;
+	}
+	private createInfEl()
+	{
+		const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		const path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+		const path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+		const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+		svg.appendChild(path1);
+		svg.appendChild(path2);
+		svg.appendChild(circle);
+		svg.setAttribute("viewBox", "0 0 512 512");
+		path1.setAttribute("d", "M256,0C114.497,0,0,114.507,0,256c0,141.503,114.507,256,256,256c141.503,0,256-114.507,256-256 C512,114.497,397.492,0,256,0z M256,472c-119.393,0-216-96.615-216-216c0-119.393,96.615-216,216-216 c119.393,0,216,96.615,216,216C472,375.393,375.384,472,256,472z");
+		path2.setAttribute("d", "M256,214.33c-11.046,0-20,8.954-20,20v128.793c0,11.046,8.954,20,20,20s20-8.955,20-20.001V234.33 C276,223.284,267.046,214.33,256,214.33z");
+		circle.setAttribute("cx", "256");
+		circle.setAttribute("cy", "162.84");
+		circle.setAttribute("r", "27");
+		svg.classList.add("TextGameEngine-inf");
+		svg.addEventListener("click", () => { });
+		return svg;
+	}
+	private createPopup(titles: Titles)
+	{
+		this.popup = Div("TextGameEngine-popup", [
+			Div("TextGameEngine-popup-container", [
+				Div("TextGameEngine-popup-title", [this.styles.style(titles.title)]),
+				Div("TextGameEngine-popup-version", [this.styles.style(titles.version)]),
+				Div("TextGameEngine-popup-inf", [
+					this.infDiv,
+				]),
+				Div("TextGameEngine-popup-engine", [
+					this.createSourceCodeEl(),
+					Div([], [], `Text Game Engine: version ${version}`),
+				]),
+				Div("TextGameEngine-popup-close", [], "×"),
+			]),
+		]);
+
+		return this.popup;
+	}
+	/**
+	 * HTMLDivElement where you can add any information
+	 */
+	public getInfDiv()
+	{
+		return this.infDiv;
 	}
 	/**
 	 * Set styles that wil be used with &number&
@@ -252,8 +300,8 @@ export class Titles
 	public title = "Text Game Engine";
 	/**Text "Tap to continue" when called TextGameEngine.wait with -1*/
 	public tapToCon = "Tap here to continue";
-	/**Engine version. Assign an empty string to remove version tag.*/
-	public version = "Version: 1.2"; //1.2
+	/**Game version, displayed in information pop-up.*/
+	public version = `Version: ${version}`;
 }
 
 class Line
@@ -700,7 +748,7 @@ class StyledText
 	}
 }
 
-function Div(classes: string | string[] = [], children: HTMLElement[] = [], text: string = "")
+function Div(classes: string | string[] = [], children: Element[] = [], text: string = "")
 {
 	const div = document.createElement("div");
 	if (typeof classes == "string") div.classList.add(classes);
