@@ -4,14 +4,14 @@ const tge = new TextGameEngine();
 tge.setStyles(["cb'red'"]);
 tge.init();
 
-await main();
+main();
 
 async function main()
 {
 	tge.clear();
 	tge.print("Welcome to the Text Game Engine");
 	tge.print("Text Game Engine is a simple way to create text game");
-	tge.print("[Wiki: https://github.com/MixelTe/TextGameEngine/wiki], [Quick start:https://github.com/MixelTe/TextGameEngine/wiki/How-to-use]");
+	tge.print("[Wiki: https://github.com/MixelTe/TextGameEngine/wiki], [Quick start:https://github.com/MixelTe/TextGameEngine/wiki/How-to-use], [Download:https://github.com/MixelTe/TextGameEngine/releases/]");
 	tge.print("Select language to continue:");
 	const chosen = await tge.choose(["English", "Russian"]);
 	if (chosen == 0)
@@ -28,14 +28,90 @@ async function main()
 		if (chosen == 0) await features_ru();
 		else await game_ru();
 	}
+	setTimeout(main, 100);
 }
 async function features_en()
 {
-
+	tge.print("Text Game Engine can:");
+	tge.print("* Print text");
+	tge.print("* Ask for a text or a number");
+	tge.print("* Ask to choose one of the options");
+	tge.print("* Create pauses like now ('Enter' also breaks pause)");
+	await tge.wait();
+	tge.print("Or pauses for a while", true);
+	await tge.wait(2);
+	tge.print("You can set min and max text length", true);
+	tge.print("And disalow spaces");
+	tge.print(".text(min: 2, max: 10, allowSpaces: true, trimSpaces: true);");
+	const text = await tge.text(2, 10);
+	tge.print(`You entered: ${text}`);
+	await tge.wait(1);
+	tge.print("You can set min and max number", true)
+	tge.print(".num(min: 1, max: 100);");
+	let num = await tge.num(1, 100);
+	tge.print(`You entered: ${num}`);
+	await tge.wait(1);
+	tge.print("If you ask for less then 16 int numbers engine will use .choose:", true)
+	tge.print(".num(min: 1, max: 16, useChoose: true);");
+	num = await tge.num(1, 16);
+	tge.print(`You entered: ${num}`);
+	await tge.wait(1);
+	tge.print();
+	tge.print();
+	tge.print("Text Game Engine also supports formatting");
+	tge.print("You can make text &iitalic&c, &bbold&c and &uunderline&c");
+	tge.print("You can make text in ^green^any ^blue^color");
+	tge.print("Or all &b&u&i^red^together");
+	await tge.wait();
+	tge.print(`Previous text line:`, true);
+	tge.print(`.print("Or all \\&b\\&u\\&i\\^red\\^together");`);
+	await tge.wait(2);
+	tge.print("You can save your combination of styles and write only its number.", true);
+	tge.print(`The same text, but with saved style:`);
+	tge.print(`.print("Or all \\&0together");`);
+	await tge.choose(["Back to top"]);
 }
 async function features_ru()
 {
-
+	tge.print("Text Game Engine может:");
+	tge.print("* Выводить текст");
+	tge.print("* Спрашивать тексты и числа");
+	tge.print("* Просить выбрать один из вариантов");
+	tge.print("* Делать паузы как сейчас ('Enter' также прервет паузу)");
+	await tge.wait();
+	tge.print("Или паузы на время", true);
+	await tge.wait(2);
+	tge.print("Вы можете указать минимальную и максимальную длину текста", true);
+	tge.print("И запретить пробелы");
+	tge.print(".text(min: 2, max: 10, allowSpaces: true, trimSpaces: true);");
+	const text = await tge.text(2, 10);
+	tge.print(`Вы ввели: ${text}`);
+	await tge.wait(1);
+	tge.print("Вы можете указать минимальное и максимальное число", true)
+	tge.print(".num(min: 1, max: 100);");
+	let num = await tge.num(1, 100);
+	tge.print(`Вы ввели: ${num}`);
+	await tge.wait(1);
+	tge.print("Если вы попросите выбрать меньше чем из 16 целых чисел, движок будет использовать .choose:", true)
+	tge.print(".num(min: 1, max: 16, useChoose: true);");
+	num = await tge.num(1, 16);
+	tge.print(`Вы ввели: ${num}`);
+	await tge.wait(1);
+	tge.print();
+	tge.print();
+	tge.print("Text Game Engine также поддерживает форматирование");
+	tge.print("Вы можете сделать текст &iкурсивом&c, &bжирным&c и &uподчеркнутым&c");
+	tge.print("Вы можете сделать текст ^green^любого ^blue^цвета");
+	tge.print("Или всё &b&u&i^red^вместе");
+	await tge.wait();
+	tge.print(`Предыдущая линия текста:`, true);
+	tge.print(`.print("Или всё \\&b\\&u\\&i\\^red\\^вместе");`);
+	await tge.wait(2);
+	tge.print("Вы можете сохранить свою комбинацию стилей и писать только ее номер.", true);
+	tge.print(`Тот же текст, но с сохранённым стилем:`);
+	tge.print(`.print("Или всё \\&0вместе");`);
+	tge.print();
+	await tge.choose(["Вернутся в начало"]);
 }
 
 
