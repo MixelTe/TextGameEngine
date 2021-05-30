@@ -118,6 +118,7 @@ body {
 	align-items: center;
 }
 .TextGameEngine-sourceCode {
+	fill: var(--color-text--);
 	vertical-align: sub;
 	height: 27px;
 	cursor: pointer;
