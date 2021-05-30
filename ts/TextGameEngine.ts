@@ -152,7 +152,7 @@ export class TextGameEngine
 		return this.infDiv;
 	}
 	/**
-	 * Set styles that wil be used with &number&
+	 * Set styles that wil be used with &digit or ^number^
 	 * @param useStyles Set to false to disable text formating
 	 */
 	public setStyles(styles: string[], useStyles = true)

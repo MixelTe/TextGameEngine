@@ -188,3 +188,19 @@ All colors are in the first lines of the css file.
 	--color-choosen-option--: darkgreen;
 }
 ```
+
+
+## Add information
+You can add any html element to the info popup
+
+Get element where you can add yours
+``` ts
+const infDiv = tge.getInfDiv();
+```
+
+Open info popup, for example on start
+``` ts
+tge.openInf();
+```
+
+![Popup](docs/popup.png)
