@@ -1,4 +1,4 @@
-const version = "1.2";
+const version = "1.3";
 /** Engine for text games*/
 export class TextGameEngine
 {
