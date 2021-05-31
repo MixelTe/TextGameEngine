@@ -309,13 +309,14 @@ export class Titles
 	/**
 	 * All texts used in TextGameEngine
 	 *
-	 * @param titles Titles in order: title, tapToCon
+	 * @param titles Titles in order: title, tapToCon, version
 	 */
 	constructor(...titles: string[])
 	{
 		const len = titles.length;
 		if (len > 0) this.title = titles[0];
 		if (len > 1) this.tapToCon = titles[1];
+		if (len > 2) this.version = titles[2];
 	}
 
 	/**Title of game*/
