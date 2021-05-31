@@ -4,7 +4,40 @@ const tge = new TextGameEngine();
 tge.setStyles(["cb'red'"]);
 tge.init();
 
+createInfDiv();
 main();
+
+function createInfDiv(ru = false)
+{
+	const infDiv = tge.getInfDiv();
+	infDiv.innerHTML = "";
+	const div1 = document.createElement("div");
+	infDiv.appendChild(div1);
+	if (ru) div1.innerText = "Информационное окно, сюда можно добавить любой html";
+	else div1.innerText = "Info div, you can add any html here";
+
+	const div2 = document.createElement("div");
+	infDiv.appendChild(div2);
+	if (ru) div2.innerText = "Заголовок всплывающего окна - Titles.title\nВторая текстовая строка - Titles.version.";
+	else div2.innerText = "The popup title is Titles.title\nThe second text line is Titles.version.";
+	div2.style.marginTop = "10px";
+
+	const pre = document.createElement("pre");
+	infDiv.appendChild(pre);
+	let preInnerText = `const infDiv = tge.getInfDiv();
+
+const div = document.createElement("div");
+infDiv.appendChild(div);\n`;
+	if (ru) preInnerText += 'div.innerText = "Здесь вы можете разместить, например, описание игры";';
+	else preInnerText += 'div.innerText = "Here you can place, for example, a description of the game";';
+	pre.innerText = preInnerText;
+	pre.style.whiteSpace = "break-spaces";
+
+	const div3 = document.createElement("div");
+	infDiv.appendChild(div3);
+	if (ru) div3.innerText = "Здесь вы можете разместить, например, описание игры";
+	else div3.innerText = "Here you can place, for example, a description of the game";
+}
 
 async function main()
 {
@@ -23,6 +56,7 @@ async function main()
 	}
 	else
 	{
+		createInfDiv(true);
 		tge.print("Выберите следующую тему:");
 		const chosen = await tge.choose(["Возможности движка", "Пример игры"]);
 		if (chosen == 0) await features_ru();
