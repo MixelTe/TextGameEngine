@@ -48,7 +48,8 @@ body {
 	max-width: 700px;
 	height: 100%;
 	background-color: var(--color-back--);
-	/* display: flex; */
+	display: flex;
+    flex-direction: column;
 }
 
 
@@ -56,13 +57,14 @@ body {
 	transition-property: background-color, color;
 	transition-duration: var(--transition--);
 	width: 100%;
-	height: var(--header-height--);
+	min-height: var(--header-height--);
 	background-color: var(--color-main--);
 	color: var(--color-text--);
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	position: relative;
+	flex: 0 0 auto;
 }
 .TextGameEngine-inf {
 	position: absolute;
@@ -72,6 +74,9 @@ body {
 }
 .TextGameEngine-title {
 	font-size: 30px;
+	margin-left: 80px;
+    margin-right: 80px;
+    text-align: center;
 }
 .TextGameEngine-theme {
 	position: absolute;
@@ -111,6 +116,9 @@ body {
 }
 .TextGameEngine-popup-title {
 	font-size: 25px;
+	margin-left: 15px;
+    margin-right: 15px;
+    text-align: center;
 }
 .TextGameEngine-popup-engine, .TextGameEngine-popup-title {
 	display: flex;
@@ -135,11 +143,12 @@ body {
 	justify-content: center;
 	align-items: center;
 	font-size: small;
+    text-align: center;
 }
 .TextGameEngine-popup-close {
 	position: absolute;
-	right: 10px;
-	top: 10px;
+	right: 6px;
+	top: 6px;
 	background-color: tomato;
 	width: 27px;
 	height: 27px;
@@ -164,7 +173,7 @@ body {
 	--font-size--: 20px;
 	transition-property: background-color, color;
 	transition-duration: var(--transition--);
-	height: calc(100% - var(--header-height--) - var(--wait-height--));
+	/* height: calc(100% - var(--header-height--) - var(--wait-height--)); */
 	padding-bottom: 10px;
 	color: var(--color-text--);
 	font-family: monospace;
@@ -173,6 +182,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	overflow-y: overlay;
+	flex-grow: 1;
 }
 ::-webkit-scrollbar {
   	width: 7px;
@@ -192,6 +202,9 @@ body {
 }
 .TextGameEngine-console-space {
 	flex: 1 1 auto;
+}
+.TextGameEngine-console span {
+    white-space: break-spaces;
 }
 /* .TextGameEngine-lines {} */
 
@@ -335,9 +348,6 @@ body {
 .TextGameEngine-link:hover {
 	text-shadow: 3px -3px 3px var(--color-text--);
 }
-.TextGameEngine-span {
-	white-space: break-spaces;
-}
 
 
 .TextGameEngine-wait {
@@ -354,6 +364,7 @@ body {
 	color: transparent;
 	/* visibility: hidden; */
 	user-select: none;
+	flex: 0 0 auto;
 }
 .TextGameEngine-wait-inf {
 	color: var(--color-text--);
@@ -366,14 +377,14 @@ body {
 	display: block;
 }
 .TextGameEngine-wait-time .TextGameEngine-wait-bubble {
-	visibility: visible;
+	display: block;
 	background-color: var(--color-text--);
 }
 .TextGameEngine-wait-bubble {
 	transition-property: background-color, color;
 	transition-duration: var(--transition--);
 	animation: TextGameEngine-bubbles 2s infinite;
-	visibility: hidden;
+	display: none;
 	width: 10px;
 	height: 10px;
 	border-radius: 50%;
