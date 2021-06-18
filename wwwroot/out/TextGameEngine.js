@@ -1,4 +1,4 @@
-const version = "1.3";
+const version = "1.3.2";
 /** Engine for text games*/
 export class TextGameEngine {
     constructor() {
@@ -9,6 +9,7 @@ export class TextGameEngine {
         this.popup = Div();
         this.styles = new TextStyles();
         this.lines = [];
+        this.tapToCon = "Tap here to continue";
     }
     /**
      * Creates all elements
@@ -17,6 +18,7 @@ export class TextGameEngine {
      */
     init(titles = new Titles(), appendToBody = true) {
         log("TextGameEngine: init");
+        this.tapToCon = titles.tapToCon;
         const themeDiv = Div("TextGameEngine-theme");
         this.mainDiv = Div("TextGameEngine-window", [
             Div("TextGameEngine-main", [
@@ -26,7 +28,6 @@ export class TextGameEngine {
                     themeDiv,
                 ]),
                 Div("TextGameEngine-console", [
-                    Div("TextGameEngine-console-space"),
                     this.linesHolder,
                 ]),
                 this.waitDiv,
@@ -34,7 +35,6 @@ export class TextGameEngine {
             this.createPopup(titles),
         ]);
         themeDiv.appendChild(this.createThemeSwitch());
-        this.waitDiv.appendChild(Div("TextGameEngine-wait-text", [this.styles.style(titles.tapToCon)]));
         for (let i = 0; i < 3; i++)
             this.waitDiv.appendChild(Div("TextGameEngine-wait-bubble"));
         if (appendToBody)
@@ -76,10 +76,11 @@ export class TextGameEngine {
         svg.setAttribute("viewBox", "0 0 16 16");
         path.setAttribute("d", "M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z");
         svg.classList.add("TextGameEngine-sourceCode");
-        svg.addEventListener("click", () => {
-            open("https://github.com/MixelTe/TextGameEngine", "_blank");
-        });
-        return svg;
+        const a = document.createElement("a");
+        a.appendChild(svg);
+        a.href = "https://github.com/MixelTe/TextGameEngine";
+        a.target = "_blank";
+        return a;
     }
     createInfEl() {
         const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -213,24 +214,9 @@ export class TextGameEngine {
     async wait(seconds = -1) {
         if (seconds < 0) {
             log("TextGameEngine: wait-inf");
-            this.waitDiv.classList.add("TextGameEngine-wait-inf");
-            let promiseResolve;
-            const onClick = () => {
-                this.waitDiv.classList.remove("TextGameEngine-wait-inf");
-                window.removeEventListener("click", onClick);
-                this.mainDiv.removeEventListener("keypress", onKeypress);
-                log("TextGameEngine: wait-inf-%cresolve%c", "color:lime", "");
-                promiseResolve();
-            };
-            const onKeypress = (e) => {
-                if (e.key == "Enter")
-                    onClick();
-            };
-            return new Promise((resolve, reject) => {
-                promiseResolve = resolve;
-                window.addEventListener("keypress", onKeypress);
-                this.waitDiv.addEventListener("click", onClick);
-            });
+            await this.choose([this.tapToCon]);
+            this.clear(1);
+            log("TextGameEngine: wait-inf-%cresolve%c", "color:lime", "");
         }
         else if (seconds > 0) {
             log(`TextGameEngine: wait - %c${seconds}%csec`, "color:#9881f6", "");
@@ -282,7 +268,7 @@ export class Titles {
     constructor(...titles) {
         /**Title of game*/
         this.title = "Text Game Engine";
-        /**Text "Tap to continue" when called TextGameEngine.wait with -1*/
+        /**Text "Tap here to continue" when called TextGameEngine.wait with -1*/
         this.tapToCon = "Tap here to continue";
         /**Game version, displayed in information pop-up.*/
         this.version = `Version: ${version}`;
@@ -399,7 +385,7 @@ class LineGetText extends Line {
             if (!allowSpaces)
                 input.value = input.value.replaceAll(" ", "");
             if (max > 0)
-                input.value = input.value.substring(0, max + 1);
+                input.value = input.value.substring(0, max);
         });
         input.addEventListener("change", () => {
             if (trimSpaces)
@@ -675,7 +661,6 @@ class TextStyles {
             if (part.link == "") {
                 const span = document.createElement("span");
                 els.push(span);
-                span.classList.add("TextGameEngine-span");
                 span.innerText = part.text;
                 if (part.bold)
                     span.style.fontWeight = "bolder";

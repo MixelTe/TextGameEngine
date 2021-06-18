@@ -48,7 +48,8 @@ body {
 	max-width: 700px;
 	height: 100%;
 	background-color: var(--color-back--);
-	/* display: flex; */
+	display: flex;
+    flex-direction: column;
 }
 
 
@@ -56,13 +57,14 @@ body {
 	transition-property: background-color, color;
 	transition-duration: var(--transition--);
 	width: 100%;
-	height: var(--header-height--);
+	min-height: var(--header-height--);
 	background-color: var(--color-main--);
 	color: var(--color-text--);
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	position: relative;
+	flex: 0 0 auto;
 }
 .TextGameEngine-inf {
 	position: absolute;
@@ -72,6 +74,9 @@ body {
 }
 .TextGameEngine-title {
 	font-size: 30px;
+	margin-left: 80px;
+    margin-right: 80px;
+    text-align: center;
 }
 .TextGameEngine-theme {
 	position: absolute;
@@ -111,6 +116,9 @@ body {
 }
 .TextGameEngine-popup-title {
 	font-size: 25px;
+	margin-left: 15px;
+    margin-right: 15px;
+    text-align: center;
 }
 .TextGameEngine-popup-engine, .TextGameEngine-popup-title {
 	display: flex;
@@ -135,11 +143,12 @@ body {
 	justify-content: center;
 	align-items: center;
 	font-size: small;
+    text-align: center;
 }
 .TextGameEngine-popup-close {
 	position: absolute;
-	right: 10px;
-	top: 10px;
+	right: 6px;
+	top: 6px;
 	background-color: tomato;
 	width: 27px;
 	height: 27px;
@@ -164,8 +173,9 @@ body {
 	--font-size--: 20px;
 	transition-property: background-color, color;
 	transition-duration: var(--transition--);
-	height: calc(100% - var(--header-height--) - var(--wait-height--));
+	/* height: calc(100% - var(--header-height--) - var(--wait-height--)); */
 	padding-bottom: 10px;
+	padding-top: 10px;
 	color: var(--color-text--);
 	font-family: monospace;
 	font-size: var(--font-size--);
@@ -173,6 +183,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	overflow-y: overlay;
+	flex-grow: 1;
 }
 ::-webkit-scrollbar {
   	width: 7px;
@@ -190,8 +201,8 @@ body {
 	background-color: rgba(136, 136, 136);
   	/* background: #555; */
 }
-.TextGameEngine-console-space {
-	flex: 1 1 auto;
+.TextGameEngine-console span {
+    white-space: break-spaces;
 }
 /* .TextGameEngine-lines {} */
 
@@ -310,16 +321,20 @@ body {
 	border: 2px solid var(--color-text--);
 	padding: 5px 7px 5px 7px;
 	margin: 3px;
-	flex: 1 0 auto;
+	flex: 1 1 auto;
 	text-align: center;
 	cursor: pointer;
 }
 .TextGameEngine-line-option-disabled {
 	cursor: text;
+	border-color: gray;
+	filter: opacity(0.4);
 }
 .TextGameEngine-line-option-chosen {
 	background-color: var(--color-choosen-option--);
 	cursor: text;
+	border-color: gray;
+	filter: opacity(0.5);
 }
 .TextGameEngine-line-break {
 	flex-basis: 100%;
@@ -334,9 +349,6 @@ body {
 }
 .TextGameEngine-link:hover {
 	text-shadow: 3px -3px 3px var(--color-text--);
-}
-.TextGameEngine-span {
-	white-space: break-spaces;
 }
 
 
@@ -354,6 +366,7 @@ body {
 	color: transparent;
 	/* visibility: hidden; */
 	user-select: none;
+	flex: 0 0 auto;
 }
 .TextGameEngine-wait-inf {
 	color: var(--color-text--);
@@ -362,18 +375,55 @@ body {
 .TextGameEngine-wait-text {
 	display: none;
 }
+.TextGameEngine-wait-arrowRight, .TextGameEngine-wait-arrowLeft {
+	--distance--: 10px;
+	transition-property: border-color, transform;
+	transition-duration: var(--transition--), 0.3s;
+	animation: TextGameEngine-arrow-left 0.8s infinite alternate;
+	position: relative;
+	display: inline-block;
+	font-size: 20px;
+	border-color: var(--color-text--);
+	border-style: solid;
+	border-width: 0 0 0.12em 0.12em;
+	transform: rotate(45deg) translateX(var(--distance--)) translateY(calc(0px - var(--distance--)));
+	height: 0.5em;
+	width: 0.5em;
+	margin-right: 0.6em;
+	margin-left: 0.6em;
+	display: none;
+}
+.TextGameEngine-wait-arrowRight::after, .TextGameEngine-wait-arrowLeft::after {
+	transition-property: background-color;
+	transition-duration: var(--transition--);
+    content: "";
+    position: absolute;
+    width: 0.9em;
+    height: 0.12em;
+    background-color: var(--color-text--);
+    transform: rotate(-45deg);
+	left: -0.14em;
+    top: 0.075em;
+}
+.TextGameEngine-wait-arrowRight {
+	animation-name: TextGameEngine-arrow-right;
+    transform: rotate(225deg) translateX(var(--distance--)) translateY(calc(0px - var(--distance--)));
+}
+.TextGameEngine-wait-inf .TextGameEngine-wait-arrowRight, .TextGameEngine-wait-inf .TextGameEngine-wait-arrowLeft {
+	display: block;
+}
 .TextGameEngine-wait-inf .TextGameEngine-wait-text {
 	display: block;
 }
 .TextGameEngine-wait-time .TextGameEngine-wait-bubble {
-	visibility: visible;
+	display: block;
 	background-color: var(--color-text--);
 }
 .TextGameEngine-wait-bubble {
 	transition-property: background-color, color;
 	transition-duration: var(--transition--);
 	animation: TextGameEngine-bubbles 2s infinite;
-	visibility: hidden;
+	display: none;
 	width: 10px;
 	height: 10px;
 	border-radius: 50%;
@@ -395,7 +445,16 @@ body {
 		transform: scale(1);
 	}
 }
-
+@keyframes TextGameEngine-arrow-left {
+	to {
+		transform: rotate(45deg) translateX(0px) translateY(0px);
+	}
+}
+@keyframes TextGameEngine-arrow-right {
+	to {
+    	transform: rotate(225deg) translateX(0px) translateY(0px);
+	}
+}
 
 
 
